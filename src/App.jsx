@@ -5,7 +5,6 @@ import EmailVerification from './pages/Auth/EmailVerification';
 import VerificationComplete from './pages/Auth/VerificationComplete';
 import IDVerificationInstructions from './pages/Auth/IDVerificationInstructions';
 import IDCameraCapture from './pages/Auth/IDCameraCapture';
-import IDConfirmation from './pages/Auth/IDConfirmation';
 import SelfieInstructions from './pages/Auth/SelfieInstructions';
 import SelfieCameraCapture from './pages/Auth/SelfieCameraCapture';
 import EmpleadoDashboard from './pages/Dashboard/EmpleadoDashboard';
