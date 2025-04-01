@@ -7,10 +7,10 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+  <HashRouter> {/* Change this from BrowserRouter */}
+    <App />
+  </HashRouter>
+</React.StrictMode>
 );
 
 // Comentamos el registro del Service Worker por ahora para evitar errores en desarrollo

@@ -38,23 +38,23 @@ function App() {
 
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        
-        {/* Rutas protegidas */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<DashboardRedirect />} />
-          <Route path="/dashboard/empleado" element={<EmpleadoDashboard />} />
-          <Route path="/dashboard/ejecutivo" element={<EjecutivoDashboard />} />
-          <Route path="/dashboard/externo" element={<ExternoDashboard />} />
-        </Route>
-        
-        {/* Ruta de 404 */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AuthProvider>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      
+      {/* Rutas protegidas */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<DashboardRedirect />} />
+        <Route path="/dashboard/empleado" element={<EmpleadoDashboard />} />
+        <Route path="/dashboard/ejecutivo" element={<EjecutivoDashboard />} />
+        <Route path="/dashboard/externo" element={<ExternoDashboard />} />
+      </Route>
+      
+      {/* Ruta de 404 */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </AuthProvider>
   );
 }
 
