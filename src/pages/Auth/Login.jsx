@@ -12,10 +12,25 @@ const Login = () => {
 
   // Redirigir si ya está autenticado
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
+    if (isAuthenticated && currentUser) {
+      // Definir la ruta de destino basada en el rol
+      let destination;
+      
+      if (currentUser.role === 'empleado') {
+        destination = '/dashboard/empleado';
+      } else if (currentUser.role === 'ejecutivo') {
+        destination = '/dashboard/ejecutivo';
+      } else if (currentUser.role === 'externo') {
+        destination = '/dashboard/externo';
+      } else {
+        // Si hay un usuario pero no tiene un rol válido, redireccionamos a la ruta principal
+        destination = '/dashboard';
+      }
+      
+      // Realizar la redirección
+      navigate(destination, { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, currentUser, navigate]);
 
   const handleLoginSubmit = async (formData) => {
     console.log('Login attempted with:', formData);
@@ -26,9 +41,8 @@ const Login = () => {
       // Usar el método de login del contexto de autenticación
       const success = await login(formData.email, formData.password);
       
-      if (success) {
-        navigate('/dashboard');
-      } else {
+      // La redirección se maneja en el useEffect de arriba
+      if (!success) {
         setLoginError('Credenciales inválidas. Por favor intenta de nuevo.');
       }
     } catch (error) {
@@ -38,6 +52,11 @@ const Login = () => {
       setIsLoggingIn(false);
     }
   };
+
+  // Si está cargando, mostramos un mensaje
+  if (authLoading) {
+    return <div className="loading-screen">Cargando...</div>;
+  }
 
   return (
     <div className="login-page">

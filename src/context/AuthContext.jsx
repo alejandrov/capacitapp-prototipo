@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import apiService from '../services/api';
 
 // Crear el contexto
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -24,21 +24,28 @@ export const AuthProvider = ({ children }) => {
             
             // Simulación para el prototipo
             console.log('Token encontrado, cargando usuario...');
+            
+            // Obtenemos el rol del localStorage para mantener la consistencia
+            // Si no hay rol, usamos 'empleado' como valor por defecto
+            const userRole = localStorage.getItem('user_role') || 'empleado';
+            
             setCurrentUser({
               id: '1',
               name: 'Miguel Villarreal',
               email: 'miguel.villarreal@gmail.com',
-              role: 'user'
+              role: userRole // Usamos un rol válido
             });
           } catch (err) {
             // Si hay un error (token expirado, inválido, etc.), limpiamos la autenticación
             console.error('Error al verificar autenticación:', err);
             localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_role');
             setCurrentUser(null);
             setError('Tu sesión ha expirado. Por favor inicia sesión de nuevo.');
           }
         } else {
           console.log('No se encontró token de autenticación');
+          setCurrentUser(null);
         }
       } catch (err) {
         setError(err.message);
@@ -66,46 +73,47 @@ export const AuthProvider = ({ children }) => {
       
       // Validar las diferentes cuentas de usuario
       if (password.length > 3) {
+        let userRole;
+        let userName;
+        
         if (email === 'empleado@gmail.com') {
-          localStorage.setItem('auth_token', 'fake-token-for-prototype');
-          setCurrentUser({
-            id: '1',
-            name: 'Miguel Villarreal',
-            email: email,
-            role: 'empleado'
-          });
-          return true;
+          userRole = 'empleado';
+          userName = 'Miguel Villarreal';
         } else if (email === 'ejecutivo@gmail.com') {
-          localStorage.setItem('auth_token', 'fake-token-for-prototype');
-          setCurrentUser({
-            id: '2',
-            name: 'Ana López',
-            email: email,
-            role: 'ejecutivo'
-          });
-          return true;
+          userRole = 'ejecutivo';
+          userName = 'Ana López';
         } else if (email === 'externo@gmail.com') {
-          localStorage.setItem('auth_token', 'fake-token-for-prototype');
-          setCurrentUser({
-            id: '3',
-            name: 'Carlos Ramírez',
-            email: email,
-            role: 'externo'
-          });
-          return true;
+          userRole = 'externo';
+          userName = 'Carlos Ramírez';
         } else {
           setError('Credenciales incorrectas');
+          setLoading(false);
           return false;
         }
+        
+        // Guardar el token y el rol en localStorage
+        localStorage.setItem('auth_token', 'fake-token-for-prototype');
+        localStorage.setItem('user_role', userRole);
+        
+        // Establecer el usuario actual
+        setCurrentUser({
+          id: Math.random().toString(36).substr(2, 9), // ID aleatorio
+          name: userName,
+          email: email,
+          role: userRole
+        });
+        
+        setLoading(false);
+        return true;
       } else {
         setError('Contraseña demasiado corta');
+        setLoading(false);
         return false;
       }
     } catch (err) {
       setError(err.message || 'Error al iniciar sesión');
-      return false;
-    } finally {
       setLoading(false);
+      return false;
     }
   };
   
@@ -121,12 +129,12 @@ export const AuthProvider = ({ children }) => {
       // Simulación para el prototipo
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay de red
       
+      setLoading(false);
       return true;
     } catch (err) {
       setError(err.message || 'Error al registrar usuario');
-      return false;
-    } finally {
       setLoading(false);
+      return false;
     }
   };
   
@@ -136,6 +144,7 @@ export const AuthProvider = ({ children }) => {
     // apiService.auth.logout();
     
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_role');
     setCurrentUser(null);
   };
   
@@ -153,4 +162,5 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Removed default export
+// Exportar el contexto
+export { AuthContext };

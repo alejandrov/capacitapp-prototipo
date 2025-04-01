@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
@@ -23,29 +24,36 @@ const ProtectedRoute = () => {
     return <div className="loading-screen">Cargando...</div>;
   }
   
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  // Usamos replace para evitar problemas de navegación
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 // Componente para redireccionar al dashboard según el rol
 const DashboardRedirect = () => {
   const { currentUser } = useAuth();
   
-  if (currentUser?.role === 'empleado') {
-    return <Navigate to="/dashboard/empleado" />;
-  } else if (currentUser?.role === 'ejecutivo') {
-    return <Navigate to="/dashboard/ejecutivo" />;
-  } else if (currentUser?.role === 'externo') {
-    return <Navigate to="/dashboard/externo" />;
-  } else {
-    return <Navigate to="/login" />;
-  }
+  // Usamos useMemo para calcular la ruta de redirección
+  const redirectPath = React.useMemo(() => {
+    if (currentUser?.role === 'empleado') {
+      return '/dashboard/empleado';
+    } else if (currentUser?.role === 'ejecutivo') {
+      return '/dashboard/ejecutivo';
+    } else if (currentUser?.role === 'externo') {
+      return '/dashboard/externo';
+    } else {
+      return '/login';
+    }
+  }, [currentUser?.role]);
+
+  // Retornamos el componente Navigate con replace=true para evitar ciclos
+  return <Navigate to={redirectPath} replace />;
 };
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verification" element={<EmailVerification />} />
