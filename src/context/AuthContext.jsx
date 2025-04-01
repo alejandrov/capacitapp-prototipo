@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay de red
       
       // Solo permitimos login con este correo para simular validación
-      if ((email === 'demo@gmail.com') && password.length > 3) {
+      if ((email === 'empleado@gmail.com') && password.length > 3) {
         localStorage.setItem('auth_token', 'fake-token-for-prototype');
         setCurrentUser({
           id: '1',

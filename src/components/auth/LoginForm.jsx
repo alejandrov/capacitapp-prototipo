@@ -40,7 +40,7 @@ const LoginForm = ({ onSubmit, loading = false, error = null }) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="demo@gmail.com"
+            placeholder="empleado@gmail.com"
           />
         </div>
         
