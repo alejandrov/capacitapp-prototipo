@@ -1,11 +1,16 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
+import EmailVerification from './pages/Auth/EmailVerification';
+import VerificationComplete from './pages/Auth/VerificationComplete';
+import IDVerificationInstructions from './pages/Auth/IDVerificationInstructions';
+import IDCameraCapture from './pages/Auth/IDCameraCapture';
+import IDConfirmation from './pages/Auth/IDConfirmation';
 import EmpleadoDashboard from './pages/Dashboard/EmpleadoDashboard';
 import EjecutivoDashboard from './pages/Dashboard/EjecutivoDashboard';
 import ExternoDashboard from './pages/Dashboard/ExternoDashboard';
 import NotFound from './pages/NotFound';
-import { AuthProvider } from './context/AuthContext'; // Updated import
+import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
 
 // Componente wrapper para rutas protegidas
@@ -42,6 +47,11 @@ function App() {
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/verification" element={<EmailVerification />} />
+      <Route path="/verification-complete" element={<VerificationComplete />} />
+      <Route path="/id-verification" element={<IDVerificationInstructions />} />
+      <Route path="/id-camera" element={<IDCameraCapture />} />
+      <Route path="/id-confirmation" element={<IDConfirmation />} />
       
       {/* Rutas protegidas */}
       <Route element={<ProtectedRoute />}>

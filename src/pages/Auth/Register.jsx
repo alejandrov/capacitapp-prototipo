@@ -15,6 +15,8 @@ const Register = () => {
     email: ''
   });
   
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -25,12 +27,15 @@ const Register = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí iría la lógica de registro
-    console.log('Registration attempted with:', formData);
+    setIsSubmitting(true);
     
-    // Para propósitos de demostración, navegamos al login
+    // Simulating registration API call
     setTimeout(() => {
-      navigate('/login');
+      console.log('Registration attempted with:', formData);
+      setIsSubmitting(false);
+      
+      // Navigate directly to the email verification screen
+      navigate('/verification', { state: { email: formData.email } });
     }, 1000);
   };
 
@@ -58,6 +63,7 @@ const Register = () => {
                 value={formData.employeeNumber}
                 onChange={handleChange}
                 placeholder="7555"
+                required
               />
             </div>
             
@@ -70,6 +76,7 @@ const Register = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Juan Pérez López"
+                required
               />
             </div>
             
@@ -82,6 +89,7 @@ const Register = () => {
                 value={formData.curp}
                 onChange={handleChange}
                 placeholder="PELJ880101HDFRNL09"
+                required
               />
             </div>
             
@@ -94,6 +102,7 @@ const Register = () => {
                 value={formData.plant}
                 onChange={handleChange}
                 placeholder="Planta Industrial Norte"
+                required
               />
             </div>
             
@@ -106,6 +115,7 @@ const Register = () => {
                 value={formData.company}
                 onChange={handleChange}
                 placeholder="Industrias Mexicanas S.A. de C.V."
+                required
               />
             </div>
             
@@ -118,11 +128,18 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="juan.perez@gmail.com"
+                required
               />
             </div>
             
-            <Button type="submit" variant="primary" fullWidth className="iniciar-button">
-              INICIAR
+            <Button 
+              type="submit" 
+              variant="primary" 
+              fullWidth 
+              className="iniciar-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'ENVIANDO...' : 'INICIAR'}
             </Button>
           </form>
         </div>
