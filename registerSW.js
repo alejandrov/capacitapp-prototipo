@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/capacitapp/sw.js', { scope: '/capacitapp/' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/capacitapp-prototipo/sw.js', { scope: '/capacitapp-prototipo/' })})}
