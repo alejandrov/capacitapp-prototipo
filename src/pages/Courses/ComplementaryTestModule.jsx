@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
+import VerificationPopup from './VerificationPopup';
 import './ComplementaryTestModule.css';
 
 const ComplementaryTestModule = () => {
@@ -16,6 +17,8 @@ const ComplementaryTestModule = () => {
   const [isAllAnswered, setIsAllAnswered] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
+  const [showVerificationPopup, setShowVerificationPopup] = useState(false);
+  const [isIdentityVerified, setIsIdentityVerified] = useState(false);
 
   // Verificar si el módulo ya está completado al cargar
   useEffect(() => {
@@ -63,19 +66,57 @@ const ComplementaryTestModule = () => {
     return (correctCount / 5) * 100;
   };
 
+  // Función para iniciar el proceso de verificación de identidad como sorpresa antes de terminar
+  const handleStartVerification = () => {
+    // Mostrar el popup de verificación sin previo aviso
+    setShowVerificationPopup(true);
+  };
+
+  // Función para manejar cuando se completa la verificación
+  const handleVerificationComplete = (success) => {
+    setShowVerificationPopup(false);
+    if (success) {
+      setIsIdentityVerified(true);
+      // Mostrar un mensaje efímero para indicar que la verificación fue exitosa
+      const verificationMessage = document.createElement('div');
+      verificationMessage.className = 'verification-success-message';
+      verificationMessage.textContent = '¡Identidad verificada! Ahora puedes terminar la prueba.';
+      document.body.appendChild(verificationMessage);
+      
+      setTimeout(() => {
+        verificationMessage.classList.add('show');
+      }, 100);
+      
+      setTimeout(() => {
+        verificationMessage.classList.remove('show');
+        setTimeout(() => {
+          document.body.removeChild(verificationMessage);
+        }, 500);
+      }, 3000);
+    }
+  };
+
   // Función para manejar la finalización del examen
   const handleFinishTest = () => {
-    const testScore = calculateScore();
-    setScore(testScore);
-    setShowResults(true);
+    // Solo si se ha verificado la identidad
+    if (isIdentityVerified) {
+      const testScore = calculateScore();
+      setScore(testScore);
+      setShowResults(true);
 
-    // Marcar el módulo como completado
-    const completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
-    if (!completedModules.includes('test')) {
-      completedModules.push('test');
-      localStorage.setItem('completedModules', JSON.stringify(completedModules));
+      // Marcar el módulo como completado SOLO si ha obtenido el 100%
+      if (testScore === 100) {
+        const completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
+        if (!completedModules.includes('test')) {
+          completedModules.push('test');
+          localStorage.setItem('completedModules', JSON.stringify(completedModules));
+        }
+        setIsModuleCompleted(true);
+      }
+    } else {
+      // Si intenta terminar sin verificar, mostrar un mensaje
+      alert('Primero debes verificar tu identidad para terminar la prueba.');
     }
-    setIsModuleCompleted(true);
   };
 
   // Función para reiniciar el examen
@@ -88,14 +129,10 @@ const ComplementaryTestModule = () => {
       q5: ''
     });
     setShowResults(false);
+    setIsIdentityVerified(false); // Restablecer el estado de verificación de identidad
     
-    // Si queremos permitir desmarcar como completado al reiniciar
-    if (isModuleCompleted) {
-      const completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
-      const filteredModules = completedModules.filter(id => id !== 'test');
-      localStorage.setItem('completedModules', JSON.stringify(filteredModules));
-      setIsModuleCompleted(false);
-    }
+    // No es necesario borrar del localStorage ya que el módulo no se marcó como completado
+    // al no haber aprobado la prueba
   };
 
   return (
@@ -136,13 +173,13 @@ const ComplementaryTestModule = () => {
             </div>
             
             <p className="results-feedback">
-              {score >= 70 
-                ? "¡Felicidades! Has aprobado la prueba complementaria." 
-                : "No has aprobado la prueba. Revisa el material para mejorar tu puntuación."}
+              {score === 100 
+                ? "¡Felicidades! Has completado la prueba complementaria con éxito." 
+                : "No has aprobado la prueba. Debes responder correctamente todas las preguntas."}
             </p>
             
             <div className="test-actions">
-              {score < 70 && (
+              {score < 100 && (
                 <Button 
                   variant="secondary"
                   onClick={handleResetTest}
@@ -365,13 +402,33 @@ const ComplementaryTestModule = () => {
             <div className="test-actions">
               <Button 
                 variant="primary"
-                onClick={handleFinishTest}
+                onClick={!isIdentityVerified ? handleStartVerification : handleFinishTest}
                 disabled={!isAllAnswered}
                 className="finish-button"
               >
                 Terminar Prueba
               </Button>
             </div>
+            
+            {/* Estado de verificación */}
+            {isIdentityVerified && (
+              <div className="verification-status">
+                <div className="verification-badge">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 0C3.6 0 0 3.6 0 8C0 12.4 3.6 16 8 16C12.4 16 16 12.4 16 8C16 3.6 12.4 0 8 0ZM6.4 12L2.4 8L3.8 6.6L6.4 9.2L12.2 3.4L13.6 4.8L6.4 12Z" fill="#4CAF50"/>
+                  </svg>
+                  <span>Identidad verificada</span>
+                </div>
+              </div>
+            )}
+            
+            {/* Popup de verificación de identidad */}
+            {showVerificationPopup && (
+              <VerificationPopup 
+                onClose={() => setShowVerificationPopup(false)}
+                onVerificationComplete={handleVerificationComplete}
+              />
+            )}
           </div>
         )}
       </div>
