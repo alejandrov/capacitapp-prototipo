@@ -3,7 +3,7 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
 import NotFound from './pages/NotFound';
-import AuthProvider from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext'; // Updated import
 import useAuth from './hooks/useAuth';
 
 // Componente wrapper para rutas protegidas
