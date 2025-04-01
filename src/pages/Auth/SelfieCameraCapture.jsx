@@ -11,28 +11,36 @@ const SelfieCameraCapture = () => {
   const [cameraActive, setCameraActive] = useState(false);
   const [cameraError, setCameraError] = useState(null);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [isIOS, setIsIOS] = useState(false);
+
+  // Detectar iOS al inicio
+  useEffect(() => {
+    // Detectar si es iOS
+    const iosDetected = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    setIsIOS(iosDetected);
+    
+    if (iosDetected) {
+      console.log("Dispositivo iOS detectado. Usando configuración especial para selfie.");
+    }
+  }, []);
 
   // Initialize camera when component mounts
   useEffect(() => {
-    // En GitHub Pages, podemos tener problemas con la cámara, así que manejamos eso más agresivamente
-    const isGitHubPages = window.location.hostname.includes('github.io');
+    // Intenta iniciar la cámara
+    startCamera();
     
-    // Intenta iniciar la cámara, pero con un timeout por si hay problemas
-    const cameraPromise = startCamera();
-    
-    // Si estamos en GitHub Pages o en otro entorno que pueda ser problemático,
-    // establecemos un timeout para mostrar la opción de simulación si tarda demasiado
-    const timeoutPromise = new Promise((resolve) => {
-      setTimeout(() => {
-        if (isInitializing && !cameraActive) {
-          setCameraError('No se pudo acceder a la cámara en un tiempo razonable. Puedes usar la simulación para continuar.');
-          setIsInitializing(false);
-        }
-      }, 3000); // 3 segundos de espera máxima
-    });
+    // Establecer un timeout para mostrar la opción de simulación si tarda demasiado
+    const timeoutId = setTimeout(() => {
+      if (isInitializing && !cameraActive) {
+        console.log("Timeout alcanzado. La cámara selfie no se inició correctamente.");
+        setCameraError('No se pudo acceder a la cámara en un tiempo razonable. Puedes usar la simulación para continuar.');
+        setIsInitializing(false);
+      }
+    }, 4000); // 4 segundos de espera máxima
     
     // Limpiar al desmontar
     return () => {
+      clearTimeout(timeoutId);
       if (videoRef.current && videoRef.current.srcObject) {
         const tracks = videoRef.current.srcObject.getTracks();
         tracks.forEach(track => track.stop());
@@ -45,39 +53,63 @@ const SelfieCameraCapture = () => {
     setCameraError(null);
     
     try {
+      // Configuración especial para iOS
       const constraints = {
+        audio: false,
         video: {
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-          facingMode: 'user' // Use front camera for selfie
+          width: { ideal: isIOS ? 640 : 1280 },
+          height: { ideal: isIOS ? 480 : 720 },
+          facingMode: 'user' // Usar cámara frontal para selfie
         }
       };
       
-      console.log('Solicitando acceso a la cámara para selfie...');
+      console.log('Solicitando acceso a la cámara selfie con restricciones:', JSON.stringify(constraints));
+      
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log('Stream de selfie obtenido correctamente:', stream.id);
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         
+        // Para iOS, necesitamos ser explícitos con el playsinline y autoplay
+        videoRef.current.setAttribute('playsinline', 'true');
+        videoRef.current.setAttribute('autoplay', 'true');
+        
+        // También forzar el play() para iOS
+        try {
+          await videoRef.current.play();
+          console.log('Video selfie play() llamado explícitamente');
+        } catch (playError) {
+          console.error('Error al intentar reproducir video selfie:', playError);
+        }
+        
         // Importante: Esperar a que el video esté listo
         videoRef.current.onloadedmetadata = () => {
-          console.log('Video metadata cargada correctamente para selfie');
+          console.log('Video selfie metadata cargada: ' + videoRef.current.videoWidth + 'x' + videoRef.current.videoHeight);
+          setCameraActive(true);
+          setIsInitializing(false);
+        };
+        
+        // Evento adicional para iOS
+        videoRef.current.onplaying = () => {
+          console.log('Video selfie está reproduciéndose');
           setCameraActive(true);
           setIsInitializing(false);
         };
         
         // Manejar el error si el video no carga correctamente
         videoRef.current.onerror = (err) => {
-          console.error('Error al cargar el video para selfie:', err);
+          console.error('Error al cargar el video selfie:', err);
           setCameraError(`Error al inicializar la cámara: ${err}`);
           setIsInitializing(false);
         };
       } else {
+        console.error('videoRef.current es null para selfie');
         setCameraError('Referencia del video no disponible');
         setIsInitializing(false);
       }
     } catch (err) {
-      console.error('Error accediendo a la cámara para selfie:', err);
+      console.error('Error accediendo a la cámara selfie:', err);
       setCameraError(`No se pudo acceder a la cámara: ${err.message || 'Error desconocido'}`);
       setCameraActive(false);
       setIsInitializing(false);
@@ -178,6 +210,7 @@ const SelfieCameraCapture = () => {
                     playsInline 
                     muted // Importante añadir muted para autoplay en algunos navegadores
                     className="camera-video"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <div className="face-overlay">
                     <div className="face-guide-text">Coloca tu rostro aquí</div>

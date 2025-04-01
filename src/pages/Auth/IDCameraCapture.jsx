@@ -11,28 +11,36 @@ const IDCameraCapture = () => {
   const [cameraActive, setCameraActive] = useState(false);
   const [cameraError, setCameraError] = useState(null);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [isIOS, setIsIOS] = useState(false);
+
+  // Detectar iOS al inicio
+  useEffect(() => {
+    // Detectar si es iOS
+    const iosDetected = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    setIsIOS(iosDetected);
+    
+    if (iosDetected) {
+      console.log("Dispositivo iOS detectado. Usando configuración especial.");
+    }
+  }, []);
 
   // Initialize camera when component mounts
   useEffect(() => {
-    // En GitHub Pages, podemos tener problemas con la cámara, así que manejamos eso más agresivamente
-    const isGitHubPages = window.location.hostname.includes('github.io');
+    // Intenta iniciar la cámara
+    startCamera();
     
-    // Intenta iniciar la cámara, pero con un timeout por si hay problemas
-    const cameraPromise = startCamera();
-    
-    // Si estamos en GitHub Pages o en otro entorno que pueda ser problemático,
-    // establecemos un timeout para mostrar la opción de simulación si tarda demasiado
-    const timeoutPromise = new Promise((resolve) => {
-      setTimeout(() => {
-        if (isInitializing && !cameraActive) {
-          setCameraError('No se pudo acceder a la cámara en un tiempo razonable. Puedes usar la simulación para continuar.');
-          setIsInitializing(false);
-        }
-      }, 3000); // 3 segundos de espera máxima
-    });
+    // Establecer un timeout para mostrar la opción de simulación si tarda demasiado
+    const timeoutId = setTimeout(() => {
+      if (isInitializing && !cameraActive) {
+        console.log("Timeout alcanzado. La cámara no se inició correctamente.");
+        setCameraError('No se pudo acceder a la cámara en un tiempo razonable. Puedes usar la simulación para continuar.');
+        setIsInitializing(false);
+      }
+    }, 4000); // 4 segundos de espera máxima
     
     // Limpiar al desmontar
     return () => {
+      clearTimeout(timeoutId);
       if (videoRef.current && videoRef.current.srcObject) {
         const tracks = videoRef.current.srcObject.getTracks();
         tracks.forEach(track => track.stop());
@@ -45,23 +53,46 @@ const IDCameraCapture = () => {
     setCameraError(null);
     
     try {
+      // Configuración especial para iOS
       const constraints = {
+        audio: false,
         video: {
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-          facingMode: { ideal: 'environment' } // Use back camera on mobile devices if available
+          width: { ideal: isIOS ? 640 : 1280 },
+          height: { ideal: isIOS ? 480 : 720 },
+          facingMode: { ideal: 'environment' } // Usar cámara trasera
         }
       };
       
-      console.log('Solicitando acceso a la cámara...');
+      console.log('Solicitando acceso a la cámara con restricciones:', JSON.stringify(constraints));
+      
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log('Stream obtenido correctamente:', stream.id);
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         
+        // Para iOS, necesitamos ser explícitos con el playsinline y autoplay
+        videoRef.current.setAttribute('playsinline', 'true');
+        videoRef.current.setAttribute('autoplay', 'true');
+        
+        // También forzar el play() para iOS
+        try {
+          await videoRef.current.play();
+          console.log('Video play() llamado explícitamente');
+        } catch (playError) {
+          console.error('Error al intentar reproducir video:', playError);
+        }
+        
         // Importante: Esperar a que el video esté listo
         videoRef.current.onloadedmetadata = () => {
-          console.log('Video metadata cargada correctamente');
+          console.log('Video metadata cargada: ' + videoRef.current.videoWidth + 'x' + videoRef.current.videoHeight);
+          setCameraActive(true);
+          setIsInitializing(false);
+        };
+        
+        // Evento adicional para iOS
+        videoRef.current.onplaying = () => {
+          console.log('Video está reproduciéndose');
           setCameraActive(true);
           setIsInitializing(false);
         };
@@ -73,6 +104,7 @@ const IDCameraCapture = () => {
           setIsInitializing(false);
         };
       } else {
+        console.error('videoRef.current es null');
         setCameraError('Referencia del video no disponible');
         setIsInitializing(false);
       }
@@ -181,6 +213,7 @@ const IDCameraCapture = () => {
                     playsInline 
                     muted // Importante añadir muted para autoplay en algunos navegadores
                     className="camera-video"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <div className="id-overlay">
                     <div className="id-guide-text">Coloca tu INE aquí</div>
