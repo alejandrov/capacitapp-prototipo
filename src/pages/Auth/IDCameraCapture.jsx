@@ -152,46 +152,69 @@ const IDCameraCapture = () => {
     navigate('/selfie-instructions');
   };
 
-  // Función para renderizar un mensaje de "fake camera" en desarrollo
-  const handleMockCapture = () => {
-    // Crear una imagen simulada (rectángulo de color)
-    const canvas = canvasRef.current;
-    canvas.width = 640;
-    canvas.height = 480;
-    const context = canvas.getContext('2d');
-    
-    // Dibujar fondo (simulando una INE)
-    context.fillStyle = '#f0e7d8';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Dibujar un borde
-    context.strokeStyle = '#333';
-    context.lineWidth = 10;
-    context.strokeRect(15, 15, canvas.width - 30, canvas.height - 30);
-    
-    // Texto simulando INE
-    context.fillStyle = '#000';
-    context.font = '30px Arial';
-    context.fillText('INSTITUTO NACIONAL ELECTORAL', 100, 60);
-    context.fillText('CREDENCIAL PARA VOTAR', 150, 100);
-    
-    // Simular foto
-    context.fillStyle = '#ddd';
-    context.fillRect(50, 140, 150, 200);
-    
-    // Simular datos
-    context.fillStyle = '#000';
-    context.font = '18px Arial';
-    context.fillText('NOMBRE: HERNÁNDEZ ROJAS ADAIR ELISEO', 220, 160);
-    context.fillText('DOMICILIO: C MORELOS 121', 220, 190);
-    context.fillText('CURP: ROOA010504HTSJDA7', 220, 220);
-    context.fillText('FECHA DE NACIMIENTO: 04/05/2001', 220, 250);
-    
-    // Convertir a imagen
-    const imageDataURL = canvas.toDataURL('image/jpeg');
-    setCapturedImage(imageDataURL);
-    setCameraActive(false);
-  };
+ // Función para renderizar un mensaje de "fake camera" en desarrollo
+ const handleMockCapture = () => {
+  // Crear una imagen simulada (rectángulo de color)
+  const canvas = canvasRef.current;
+  canvas.width = 640;
+  canvas.height = 480;
+  const context = canvas.getContext('2d');
+  
+  // Dibujar fondo (simulando una INE)
+  context.fillStyle = '#f0e7d8';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Dibujar un borde
+  context.strokeStyle = '#333';
+  context.lineWidth = 10;
+  context.strokeRect(15, 15, canvas.width - 30, canvas.height - 30);
+  
+  // Texto simulando INE
+  context.fillStyle = '#000';
+  context.font = '30px Arial';
+  context.fillText('INSTITUTO NACIONAL ELECTORAL', 100, 60);
+  context.fillText('CREDENCIAL PARA VOTAR', 150, 100);
+  
+  // Simular foto con el mismo avatar que se usa en verification complete
+  // Dibuja un cuadro gris primero
+  context.fillStyle = '#ddd';
+  context.fillRect(50, 140, 150, 200);
+  
+  // Agregar avatar simple
+  context.beginPath();
+  context.arc(125, 190, 45, 0, 2 * Math.PI); // Cabeza
+  context.fillStyle = '#ddd';
+  context.fill();
+  context.stroke();
+  
+  context.beginPath();
+  context.arc(125, 175, 12, 0, 2 * Math.PI); // Cara superior
+  context.fillStyle = '#aaa';
+  context.fill();
+  
+  // Dibujar cuerpo estilizado
+  context.beginPath();
+  context.moveTo(80, 250);
+  context.bezierCurveTo(80, 235, 170, 235, 170, 250);
+  context.lineTo(170, 255);
+  context.lineTo(80, 255);
+  context.closePath();
+  context.fillStyle = '#aaa';
+  context.fill();
+  
+  // Simular datos
+  context.fillStyle = '#000';
+  context.font = '18px Arial';
+  context.fillText('NOMBRE: HERNÁNDEZ ROJAS ADAIR ELISEO', 220, 160);
+  context.fillText('DOMICILIO: C MORELOS 121', 220, 190);
+  context.fillText('CURP: ROOA010504HTSJDA7', 220, 220);
+  context.fillText('FECHA DE NACIMIENTO: 04/05/2001', 220, 250);
+  
+  // Convertir a imagen
+  const imageDataURL = canvas.toDataURL('image/jpeg');
+  setCapturedImage(imageDataURL);
+  setCameraActive(false);
+};
 
   return (
     <div className="id-camera-page">
