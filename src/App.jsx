@@ -52,7 +52,7 @@ function App() {
         <Route path="/verification-complete" element={<VerificationComplete />} />
         <Route path="/id-verification" element={<IDVerificationInstructions />} />
         <Route path="/id-camera" element={<IDCameraCapture />} />
-        <Route path="/id-confirmation" element={<IDConfirmation />} />
+        {/* Eliminada la ruta de confirmación de ID */}
         <Route path="/selfie-instructions" element={<SelfieInstructions />} />
         <Route path="/selfie-camera" element={<SelfieCameraCapture />} />
         

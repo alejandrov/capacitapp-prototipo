@@ -148,8 +148,8 @@ const IDCameraCapture = () => {
   };
 
   const handleContinue = () => {
-    // Navigate to ID confirmation screen with the captured image
-    navigate('/id-confirmation', { state: { capturedImage } });
+    // Navigate directly to selfie instructions screen, skipping the ID confirmation
+    navigate('/selfie-instructions');
   };
 
   // Función para renderizar un mensaje de "fake camera" en desarrollo

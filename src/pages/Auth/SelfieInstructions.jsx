@@ -29,7 +29,7 @@ const SelfieInstructions = () => {
               </svg>
             </div>
             <div className="step-content">
-              <h3 className="step-title">Escanear tú identificación</h3>
+              <h3 className="step-title"><del>Escanear tú identificación</del></h3>
               <p className="step-description">Será por ambos lados</p>
             </div>
           </div>

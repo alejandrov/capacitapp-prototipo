@@ -41,23 +41,28 @@ const VerificationComplete = () => {
         <div className="comparison-container">
           <div className="comparison-images">
             <div className="comparison-image">
-              {/* Simular foto de ID */}
+              {/* Simular foto de ID - rostro recortado de la credencial */}
               <div style={{
                 width: '100%',
                 height: '100%',
-                backgroundImage: 'linear-gradient(45deg, #e0e0e0 25%, #d0d0d0 25%, #d0d0d0 50%, #e0e0e0 50%, #e0e0e0 75%, #d0d0d0 75%, #d0d0d0 100%)',
-                backgroundSize: '20px 20px'
+                backgroundColor: '#f0e7d8',
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\' viewBox=\'0 0 120 120\'%3E%3Ccircle cx=\'60\' cy=\'55\' r=\'45\' fill=\'%23ddd\'/%3E%3Ccircle cx=\'60\' cy=\'40\' r=\'12\' fill=\'%23aaa\'/%3E%3Cpath d=\'M40 80 C 40 65, 80 65, 80 80 L 80 85 L 40 85 Z\' fill=\'%23aaa\'/%3E%3C/svg%3E")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                position: 'relative'
               }}></div>
               <div className="scanning-effect"></div>
             </div>
             
             <div className="comparison-image">
-              {/* Simular selfie */}
+              {/* Simular selfie - rostro con mejor calidad pero mismas proporciones */}
               <div style={{
                 width: '100%',
                 height: '100%',
-                backgroundImage: 'linear-gradient(45deg, #e0e0e0 25%, #d0d0d0 25%, #d0d0d0 50%, #e0e0e0 50%, #e0e0e0 75%, #d0d0d0 75%, #d0d0d0 100%)',
-                backgroundSize: '20px 20px'
+                backgroundColor: '#f5f5f5',
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\' viewBox=\'0 0 120 120\'%3E%3Ccircle cx=\'60\' cy=\'55\' r=\'45\' fill=\'%23e0e0e0\'/%3E%3Ccircle cx=\'48\' cy=\'40\' r=\'8\' fill=\'%23555\'/%3E%3Ccircle cx=\'72\' cy=\'40\' r=\'8\' fill=\'%23555\'/%3E%3Cpath d=\'M40 75 C 50 90, 70 90, 80 75\' stroke=\'%23555\' stroke-width=\'3\' fill=\'transparent\'/%3E%3C/svg%3E")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
               }}></div>
               <div className="scanning-effect"></div>
             </div>
