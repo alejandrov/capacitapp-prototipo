@@ -1,63 +1,102 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '../../components/common/Button';
-import useAuth from '../../hooks/useAuth';
+import React, { useState } from 'react';
+import { 
+  Settings as GearIcon, 
+  Shield as ShieldIcon, 
+  Box as BoxIcon, 
+  Cpu as CpuIcon, 
+  Flag as FlagIcon
+} from 'lucide-react';
+import DashboardHeader from './DashboardHeader';
+import BottomNavigation from './BottomNavigation';
+import MessagesPage from './MessagesPage';
 import './Dashboard.css';
 
 const EmpleadoDashboard = () => {
-  const navigate = useNavigate();
-  const { logout, currentUser } = useAuth();
-  
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const [activeTab, setActiveTab] = useState('home');
+
+  const pruebas = [
+    { 
+      icon: <ShieldIcon color="#1a1060" size={32} />, 
+      title: 'Seguridad', 
+      description: 'Evaluación de protocolos' 
+    },
+    { 
+      icon: <BoxIcon color="#1a1060" size={32} />, 
+      title: 'Almacén', 
+      description: 'Control de inventario' 
+    },
+    { 
+      icon: <FlagIcon color="#1a1060" size={32} />, 
+      title: 'Ética y Valores', 
+      description: 'Principios corporativos' 
+    },
+    { 
+      icon: <CpuIcon color="#1a1060" size={32} />, 
+      title: 'Psicomético', 
+      description: 'Evaluación psicológica' 
+    },
+    { 
+      icon: <GearIcon color="#1a1060" size={32} />, 
+      title: 'Manejo de Químicos', 
+      description: 'Seguridad industrial' 
+    }
+  ];
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
   };
 
-  return (
-    <div className="dashboard-page">
-      <header className="dashboard-header">
-        <h1>CapacitApp - Empleado</h1>
-        <div className="header-actions">
-          <span className="user-name">{currentUser?.name}</span>
-          <Button onClick={handleLogout} variant="text" className="header-logout-btn">
-            <span className="logout-icon">↩</span> Salir
-          </Button>
-        </div>
-      </header>
-      
-      <main className="dashboard-content">
-        <div className="dashboard-welcome">
-          <h2>Bienvenido {currentUser?.name}</h2>
-          <p>Este es el panel para empleados.</p>
-        </div>
-        
-        <div className="dashboard-cards">
-          <div className="dashboard-card">
-            <h3>Mis Cursos</h3>
-            <p>Explora los cursos asignados para tu rol.</p>
-          </div>
-          
-          <div className="dashboard-card">
-            <h3>Mi Progreso</h3>
-            <p>Revisa tu avance de aprendizaje.</p>
-          </div>
-          
-          <div className="dashboard-card">
-            <h3>Certificados</h3>
-            <p>Visualiza tus certificados obtenidos.</p>
-          </div>
-        </div>
-        
-        <div className="logout-container">
-          <Button 
-            onClick={handleLogout} 
-            variant="secondary" 
-            className="logout-button"
+  const renderHomeContent = () => (
+    <div className="dashboard-content">
+      <DashboardHeader />
+
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(2, 1fr)', 
+        gap: '15px' 
+      }}>
+        {pruebas.map((prueba, index) => (
+          <div 
+            key={index} 
+            style={{ 
+              backgroundColor: 'white', 
+              borderRadius: '12px', 
+              padding: '15px', 
+              textAlign: 'center', 
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)' 
+            }}
           >
-            Cerrar sesión
-          </Button>
-        </div>
-      </main>
+            <div style={{ marginBottom: '10px' }}>
+              {prueba.icon}
+            </div>
+            <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>{prueba.title}</h3>
+            <p style={{ 
+              margin: '5px 0 0', 
+              fontSize: '12px', 
+              color: '#666' 
+            }}>{prueba.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div 
+      style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        height: '100vh', 
+        backgroundColor: '#f5f5f5' 
+      }}
+    >
+      {activeTab === 'home' && renderHomeContent()}
+      {activeTab === 'messages' && <MessagesPage />}
+
+      <BottomNavigation 
+        activeTab={activeTab} 
+        onTabChange={handleTabChange} 
+      />
     </div>
   );
 };
