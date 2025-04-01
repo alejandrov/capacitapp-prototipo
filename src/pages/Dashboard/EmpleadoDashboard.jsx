@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
+  Home as HomeIcon, 
+  MessageCircle as MessageCircleIcon,
   Settings as GearIcon, 
   Shield as ShieldIcon, 
   Box as BoxIcon, 
@@ -12,38 +15,50 @@ import MessagesPage from './MessagesPage';
 import './Dashboard.css';
 
 const EmpleadoDashboard = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
 
   const pruebas = [
     { 
       icon: <ShieldIcon color="#1a1060" size={32} />, 
       title: 'Seguridad', 
-      description: 'Evaluación de protocolos' 
+      description: 'Evaluación de protocolos',
+      route: '/courses/safety'
     },
     { 
       icon: <BoxIcon color="#1a1060" size={32} />, 
       title: 'Almacén', 
-      description: 'Control de inventario' 
+      description: 'Control de inventario',
+      route: null
     },
     { 
       icon: <FlagIcon color="#1a1060" size={32} />, 
       title: 'Ética y Valores', 
-      description: 'Principios corporativos' 
+      description: 'Principios corporativos',
+      route: null
     },
     { 
       icon: <CpuIcon color="#1a1060" size={32} />, 
       title: 'Psicomético', 
-      description: 'Evaluación psicológica' 
+      description: 'Evaluación psicológica',
+      route: null
     },
     { 
       icon: <GearIcon color="#1a1060" size={32} />, 
       title: 'Manejo de Químicos', 
-      description: 'Seguridad industrial' 
+      description: 'Seguridad industrial',
+      route: null
     }
   ];
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleCourseNavigation = (route) => {
+    if (route) {
+      navigate(route);
+    }
   };
 
   const renderHomeContent = () => (
@@ -58,12 +73,14 @@ const EmpleadoDashboard = () => {
         {pruebas.map((prueba, index) => (
           <div 
             key={index} 
+            onClick={() => handleCourseNavigation(prueba.route)}
             style={{ 
               backgroundColor: 'white', 
               borderRadius: '12px', 
               padding: '15px', 
               textAlign: 'center', 
-              boxShadow: '0 4px 6px rgba(0,0,0,0.1)' 
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+              cursor: prueba.route ? 'pointer' : 'default'
             }}
           >
             <div style={{ marginBottom: '10px' }}>

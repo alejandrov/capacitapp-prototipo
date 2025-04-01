@@ -10,6 +10,7 @@ import SelfieCameraCapture from './pages/Auth/SelfieCameraCapture';
 import EmpleadoDashboard from './pages/Dashboard/EmpleadoDashboard';
 import EjecutivoDashboard from './pages/Dashboard/EjecutivoDashboard';
 import ExternoDashboard from './pages/Dashboard/ExternoDashboard';
+import SafetyCourse from './pages/Courses/SafetyCourse';
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
@@ -51,7 +52,6 @@ function App() {
         <Route path="/verification-complete" element={<VerificationComplete />} />
         <Route path="/id-verification" element={<IDVerificationInstructions />} />
         <Route path="/id-camera" element={<IDCameraCapture />} />
-        {/* Eliminada la ruta de confirmación de ID */}
         <Route path="/selfie-instructions" element={<SelfieInstructions />} />
         <Route path="/selfie-camera" element={<SelfieCameraCapture />} />
         
@@ -61,6 +61,7 @@ function App() {
           <Route path="/dashboard/empleado" element={<EmpleadoDashboard />} />
           <Route path="/dashboard/ejecutivo" element={<EjecutivoDashboard />} />
           <Route path="/dashboard/externo" element={<ExternoDashboard />} />
+          <Route path="/courses/safety" element={<SafetyCourse />} />
         </Route>
         
         {/* Ruta de 404 */}
