@@ -16,6 +16,7 @@ import RiskIdentificationModule from './pages/Courses/RiskIdentificationModule';
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
+import ComplementaryTestModule from './pages/Courses/ComplementaryTestModule';
 
 // Componente wrapper para rutas protegidas
 const ProtectedRoute = () => {
@@ -72,6 +73,8 @@ function App() {
           <Route path="/dashboard/externo" element={<ExternoDashboard />} />
           <Route path="/courses/safety" element={<SafetyCourse />} />
           <Route path="/courses/risk-identification" element={<RiskIdentificationModule />} /> {/* Nueva ruta */}
+          <Route path="/courses/complementary-test" element={<ComplementaryTestModule />} />
+
         </Route>
         
         {/* Ruta de 404 */}
