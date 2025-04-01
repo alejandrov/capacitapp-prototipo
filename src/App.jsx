@@ -6,6 +6,8 @@ import VerificationComplete from './pages/Auth/VerificationComplete';
 import IDVerificationInstructions from './pages/Auth/IDVerificationInstructions';
 import IDCameraCapture from './pages/Auth/IDCameraCapture';
 import IDConfirmation from './pages/Auth/IDConfirmation';
+import SelfieInstructions from './pages/Auth/SelfieInstructions';
+import SelfieCameraCapture from './pages/Auth/SelfieCameraCapture';
 import EmpleadoDashboard from './pages/Dashboard/EmpleadoDashboard';
 import EjecutivoDashboard from './pages/Dashboard/EjecutivoDashboard';
 import ExternoDashboard from './pages/Dashboard/ExternoDashboard';
@@ -40,31 +42,32 @@ const DashboardRedirect = () => {
 };
 
 function App() {
-
   return (
     <AuthProvider>
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/verification" element={<EmailVerification />} />
-      <Route path="/verification-complete" element={<VerificationComplete />} />
-      <Route path="/id-verification" element={<IDVerificationInstructions />} />
-      <Route path="/id-camera" element={<IDCameraCapture />} />
-      <Route path="/id-confirmation" element={<IDConfirmation />} />
-      
-      {/* Rutas protegidas */}
-      <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<DashboardRedirect />} />
-        <Route path="/dashboard/empleado" element={<EmpleadoDashboard />} />
-        <Route path="/dashboard/ejecutivo" element={<EjecutivoDashboard />} />
-        <Route path="/dashboard/externo" element={<ExternoDashboard />} />
-      </Route>
-      
-      {/* Ruta de 404 */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </AuthProvider>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verification" element={<EmailVerification />} />
+        <Route path="/verification-complete" element={<VerificationComplete />} />
+        <Route path="/id-verification" element={<IDVerificationInstructions />} />
+        <Route path="/id-camera" element={<IDCameraCapture />} />
+        <Route path="/id-confirmation" element={<IDConfirmation />} />
+        <Route path="/selfie-instructions" element={<SelfieInstructions />} />
+        <Route path="/selfie-camera" element={<SelfieCameraCapture />} />
+        
+        {/* Rutas protegidas */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardRedirect />} />
+          <Route path="/dashboard/empleado" element={<EmpleadoDashboard />} />
+          <Route path="/dashboard/ejecutivo" element={<EjecutivoDashboard />} />
+          <Route path="/dashboard/externo" element={<ExternoDashboard />} />
+        </Route>
+        
+        {/* Ruta de 404 */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AuthProvider>
   );
 }
 

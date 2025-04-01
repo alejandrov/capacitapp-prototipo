@@ -29,9 +29,8 @@ const IDConfirmation = () => {
   };
 
   const handleContinue = () => {
-    // In a real app, you would save the verified ID data
-    // For the prototype, just navigate to the login screen
-    navigate('/login');
+    // Navigate to the selfie instructions screen
+    navigate('/selfie-instructions');
   };
 
   if (!capturedImage) {

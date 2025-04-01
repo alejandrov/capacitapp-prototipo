@@ -87,8 +87,8 @@ const EmailVerification = () => {
       setTimeout(() => {
         setIsVerifying(false);
         
-        // Navigate to verification complete page
-        navigate('/verification-complete');
+        // CORRECCIÓN: Navigate to ID verification instructions page instead of verification complete
+        navigate('/id-verification');
       }, 1500);
     }
   };

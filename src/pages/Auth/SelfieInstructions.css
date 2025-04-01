@@ -1,0 +1,121 @@
+.selfie-instructions-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-background);
+  }
+  
+  .selfie-instructions-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: var(--spacing-lg);
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .selfie-instructions-title {
+    font-size: 28px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    text-align: left;
+  }
+  
+  .selfie-instructions-subtitle {
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.5;
+    text-align: left;
+  }
+  
+  .instructions-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+  }
+  
+  .instruction-step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+  
+  .step-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+  }
+  
+  .step-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: white;
+    flex-shrink: 0;
+  }
+  
+  .step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .step-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .step-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  
+  .instruction-step.completed .step-title {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+  
+  .instruction-step.active .step-title {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+  }
+  
+  .selfie-start-button {
+    margin-top: auto;
+    height: 50px;
+    font-weight: var(--font-weight-medium);
+    background-color: var(--color-primary);
+    color: white;
+    text-transform: uppercase;
+    border-radius: var(--border-radius-md);
+  }
+  
+  @media (max-width: 480px) {
+    .selfie-instructions-container {
+      padding: var(--spacing-md);
+    }
+    
+    .selfie-instructions-title {
+      font-size: 24px;
+    }
+  }

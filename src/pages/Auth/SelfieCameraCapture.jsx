@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
-import './IDCameraCapture.css';
+import './SelfieCameraCapture.css';
 
-const IDCameraCapture = () => {
+const SelfieCameraCapture = () => {
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -34,11 +34,11 @@ const IDCameraCapture = () => {
         video: {
           width: { ideal: 1280 },
           height: { ideal: 720 },
-          facingMode: { ideal: 'environment' } // Use back camera on mobile devices if available
+          facingMode: 'user' // Use front camera for selfie
         }
       };
       
-      console.log('Solicitando acceso a la cámara...');
+      console.log('Solicitando acceso a la cámara para selfie...');
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       
       if (videoRef.current) {
@@ -46,14 +46,14 @@ const IDCameraCapture = () => {
         
         // Importante: Esperar a que el video esté listo
         videoRef.current.onloadedmetadata = () => {
-          console.log('Video metadata cargada correctamente');
+          console.log('Video metadata cargada correctamente para selfie');
           setCameraActive(true);
           setIsInitializing(false);
         };
         
         // Manejar el error si el video no carga correctamente
         videoRef.current.onerror = (err) => {
-          console.error('Error al cargar el video:', err);
+          console.error('Error al cargar el video para selfie:', err);
           setCameraError(`Error al inicializar la cámara: ${err}`);
           setIsInitializing(false);
         };
@@ -62,7 +62,7 @@ const IDCameraCapture = () => {
         setIsInitializing(false);
       }
     } catch (err) {
-      console.error('Error accediendo a la cámara:', err);
+      console.error('Error accediendo a la cámara para selfie:', err);
       setCameraError(`No se pudo acceder a la cámara: ${err.message}`);
       setCameraActive(false);
       setIsInitializing(false);
@@ -101,44 +101,41 @@ const IDCameraCapture = () => {
   };
 
   const handleContinue = () => {
-    // Navigate to ID confirmation screen with the captured image
-    navigate('/id-confirmation', { state: { capturedImage } });
+    // Navigate to the verification complete screen with the captured selfie
+    navigate('/verification-complete', { state: { selfieCaptured: true } });
   };
 
-  // Función para renderizar un mensaje de "fake camera" en desarrollo
+  // Función para renderizar un "fake selfie" en desarrollo
   const handleMockCapture = () => {
-    // Crear una imagen simulada (rectángulo de color)
+    // Crear una imagen simulada de un selfie
     const canvas = canvasRef.current;
     canvas.width = 640;
     canvas.height = 480;
     const context = canvas.getContext('2d');
     
-    // Dibujar fondo (simulando una INE)
-    context.fillStyle = '#f0e7d8';
+    // Dibujar fondo
+    context.fillStyle = '#f5f5f5';
     context.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Dibujar un borde
-    context.strokeStyle = '#333';
-    context.lineWidth = 10;
-    context.strokeRect(15, 15, canvas.width - 30, canvas.height - 30);
+    // Dibujar un círculo que simula una cara
+    context.fillStyle = '#e0e0e0';
+    context.beginPath();
+    context.arc(canvas.width / 2, canvas.height / 2, 120, 0, Math.PI * 2);
+    context.fill();
     
-    // Texto simulando INE
-    context.fillStyle = '#000';
-    context.font = '30px Arial';
-    context.fillText('INSTITUTO NACIONAL ELECTORAL', 100, 60);
-    context.fillText('CREDENCIAL PARA VOTAR', 150, 100);
+    // Dibujar ojos
+    context.fillStyle = '#555';
+    context.beginPath();
+    context.arc(canvas.width / 2 - 40, canvas.height / 2 - 20, 10, 0, Math.PI * 2);
+    context.arc(canvas.width / 2 + 40, canvas.height / 2 - 20, 10, 0, Math.PI * 2);
+    context.fill();
     
-    // Simular foto
-    context.fillStyle = '#ddd';
-    context.fillRect(50, 140, 150, 200);
-    
-    // Simular datos
-    context.fillStyle = '#000';
-    context.font = '18px Arial';
-    context.fillText('NOMBRE: HERNÁNDEZ ROJAS ADAIR ELISEO', 220, 160);
-    context.fillText('DOMICILIO: C MORELOS 121', 220, 190);
-    context.fillText('CURP: ROOA010504HTSJDA7', 220, 220);
-    context.fillText('FECHA DE NACIMIENTO: 04/05/2001', 220, 250);
+    // Dibujar boca
+    context.beginPath();
+    context.arc(canvas.width / 2, canvas.height / 2 + 30, 50, 0.1 * Math.PI, 0.9 * Math.PI);
+    context.strokeStyle = '#555';
+    context.lineWidth = 3;
+    context.stroke();
     
     // Convertir a imagen
     const imageDataURL = canvas.toDataURL('image/jpeg');
@@ -147,19 +144,19 @@ const IDCameraCapture = () => {
   };
 
   return (
-    <div className="id-camera-page">
-      <div className="id-camera-container">
-        <h1 className="id-camera-title">Captura de INE</h1>
+    <div className="selfie-camera-page">
+      <div className="selfie-camera-container">
+        <h1 className="selfie-camera-title">Captura de Selfie</h1>
         
-        <p className="id-camera-instructions">
-          Coloca tu identificación dentro del marco y asegúrate que sea legible.
+        <p className="selfie-camera-instructions">
+          Coloca tu rostro dentro del marco y asegúrate que esté bien iluminado.
         </p>
         
         <div className="camera-view-container">
           {!capturedImage ? (
             <>
               {cameraActive ? (
-                <div className="camera-frame">
+                <div className="selfie-camera-frame">
                   <video 
                     ref={videoRef} 
                     autoPlay 
@@ -167,8 +164,8 @@ const IDCameraCapture = () => {
                     muted // Importante añadir muted para autoplay en algunos navegadores
                     className="camera-video"
                   />
-                  <div className="id-overlay">
-                    <div className="id-guide-text">Coloca tu INE aquí</div>
+                  <div className="face-overlay">
+                    <div className="face-guide-text">Coloca tu rostro aquí</div>
                   </div>
                 </div>
               ) : (
@@ -182,7 +179,7 @@ const IDCameraCapture = () => {
                         variant="secondary" 
                         onClick={handleMockCapture}
                       >
-                        Simular Captura (Demo)
+                        Simular Selfie (Demo)
                       </Button>
                     </div>
                   )}
@@ -202,7 +199,7 @@ const IDCameraCapture = () => {
           ) : (
             <>
               <div className="captured-image-container">
-                <img src={capturedImage} alt="ID Capturada" className="captured-image" />
+                <img src={capturedImage} alt="Selfie Capturada" className="captured-image" />
               </div>
               
               <div className="capture-actions">
@@ -233,4 +230,4 @@ const IDCameraCapture = () => {
   );
 };
 
-export default IDCameraCapture;
+export default SelfieCameraCapture;

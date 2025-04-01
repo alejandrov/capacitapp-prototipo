@@ -1,50 +1,60 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import './VerificationComplete.css';
 
 const VerificationComplete = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const selfieCaptured = location.state?.selfieCaptured;
+
+  // Si llegamos a esta pantalla sin haber pasado por la captura de selfie,
+  // y no venimos desde el flujo de verificación de correo,
+  // entonces probablemente necesitamos redireccionar al flujo correcto
+  useEffect(() => {
+    if (!selfieCaptured && !location.state?.fromEmailVerification) {
+      // Redirigir al inicio del proceso de verificación de ID
+      navigate('/id-verification');
+    }
+  }, [selfieCaptured, location.state, navigate]);
 
   const handleContinue = () => {
-    // Navigate to ID verification instructions page after email verification is complete
-    navigate('/id-verification');
+    // Navigate to login page after verification is complete
+    navigate('/login');
   };
 
   return (
     <div className="verification-complete-page">
       <div className="verification-complete-container">
-        <h1 className="verification-complete-title">Verificación Completa</h1>
+        <div className="verification-success-icon">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="40" fill="#4CAF50" fillOpacity="0.1"/>
+            <circle cx="40" cy="40" r="32" fill="#4CAF50"/>
+            <path d="M30 40L36 46L50 32" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        
+        <h1 className="verification-complete-title">¡Verificación Completa!</h1>
         
         <p className="verification-complete-text">
-          Su cuenta ha sido creada exitosamente.
+          Su identificación y datos biométricos han sido verificados exitosamente.
           <br />
-          A continuación, le solicitaremos seguir unos pasos
-          <br />
-          para completar el proceso de seguridad.
+          Ya puede iniciar sesión en la plataforma con las credenciales proporcionadas.
         </p>
         
         <div className="verification-complete-illustration">
-          <svg width="240" height="160" viewBox="0 0 240 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Envelope background */}
-            <rect x="170" y="40" width="70" height="120" rx="5" fill="#F5F5F5"/>
-            <rect x="190" y="10" width="15" height="30" fill="#F5F5F5"/>
+          <svg width="240" height="120" viewBox="0 0 240 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* ID Card */}
+            <rect x="40" y="30" width="160" height="90" rx="8" fill="#1a1060"/>
+            <rect x="50" y="40" width="50" height="60" rx="4" fill="#f0e7d8"/>
+            <circle cx="75" cy="60" r="15" fill="#ccc"/>
+            <rect x="110" y="45" width="80" height="8" rx="2" fill="white"/>
+            <rect x="110" y="60" width="80" height="8" rx="2" fill="white"/>
+            <rect x="110" y="75" width="60" height="8" rx="2" fill="white"/>
             
-            {/* Envelope */}
-            <path d="M190 40H250V120C250 123.314 247.314 126 244 126H196C192.686 126 190 123.314 190 120V40Z" fill="#1a1060"/>
-            <path d="M190 40L220 70L250 40H190Z" fill="#231582"/>
-            
-            {/* Letter with checkmark */}
-            <rect x="205" y="55" width="30" height="40" rx="2" fill="white"/>
-            <circle cx="220" cy="75" r="12" fill="#FFB74D"/>
-            <path d="M216 75L219 78L224 73" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            
-            {/* Person figure */}
-            <rect x="240" y="115" width="10" height="20" fill="#424242"/> {/* leg */}
-            <rect x="255" y="115" width="10" height="20" fill="#424242"/> {/* leg */}
-            <rect x="245" y="80" width="15" height="35" fill="#1a1060"/> {/* body */}
-            <circle cx="252.5" cy="70" r="10" fill="#E0E0E0"/> {/* head */}
-            <path d="M240 90H235C233.895 90 233 90.8954 233 92V100C233 101.105 233.895 102 235 102H240V90Z" fill="#1a1060"/> {/* arm */}
+            {/* Check Mark */}
+            <circle cx="180" cy="40" r="20" fill="#4CAF50"/>
+            <path d="M170 40L178 48L190 36" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
         
@@ -54,7 +64,7 @@ const VerificationComplete = () => {
           onClick={handleContinue}
           className="verification-continue-button"
         >
-          CONTINUE
+          INICIAR SESIÓN
         </Button>
       </div>
     </div>

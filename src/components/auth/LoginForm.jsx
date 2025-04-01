@@ -55,7 +55,7 @@ const LoginForm = ({ onSubmit, loading = false, error = null }) => {
             placeholder="••••••••••"
           />
         </div>
-        
+
         <div className="form-options">
           <Link to="/forgot-password" className="forgot-password-link">
             Olvidé mi contraseña
@@ -73,7 +73,9 @@ const LoginForm = ({ onSubmit, loading = false, error = null }) => {
           <Link to="/register" className="register-link">
             Crea una
           </Link>
+         
         </div>
+        <small>v9.13</small>
       </form>
     </div>
   );
