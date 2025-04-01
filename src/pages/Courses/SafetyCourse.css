@@ -345,3 +345,13 @@
       margin-bottom: var(--spacing-sm);
     }
   }
+  .completed-indicator {
+    color: var(--color-success);
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 5px;
+  }
+  
+  .start-module-button {
+    min-width: 110px;
+  }

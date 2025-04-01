@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Home as HomeIcon, 
@@ -15,35 +15,86 @@ const SafetyCourse = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [modules, setModules] = useState([
     { 
+      id: 'identification',
       title: 'Identificación de Riesgos', 
       description: 'Aprenderás a identificar los riesgos existentes en tu área de trabajo.',
-      completed: false
+      completed: false,
+      route: '/courses/risk-identification'
     },
     { 
+      id: 'protection',
       title: 'Equipo de Protección', 
       description: 'Conocerás y aprenderás a utilizar el equipo de protección adecuado.',
-      completed: false
+      completed: false,
+      route: null
     },
     { 
+      id: 'emergency',
       title: 'Procedimientos de Emergencia', 
       description: 'Entenderás los protocolos a seguir en situaciones de emergencia.',
-      completed: false
+      completed: false,
+      route: null
     },
     { 
+      id: 'test',
       title: 'Prueba Complementaria', 
       description: 'Evaluación final de los conocimientos adquiridos.',
-      completed: false
+      completed: false,
+      route: null
     }
   ]);
 
-  const handleStartModule = (moduleIndex) => {
-    // Logic for starting a specific module
-    console.log(`Starting module ${moduleIndex + 1}`);
+  // Cargar los módulos completados desde localStorage al iniciar
+  useEffect(() => {
+    const completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
     
-    // For now, just update the completed status
-    const updatedModules = [...modules];
-    updatedModules[moduleIndex].completed = true;
-    setModules(updatedModules);
+    if (completedModules.length > 0) {
+      setModules(prevModules => 
+        prevModules.map(module => ({
+          ...module,
+          completed: completedModules.includes(module.id)
+        }))
+      );
+    }
+  }, []);
+
+  const handleModuleAction = (moduleIndex) => {
+    const selectedModule = modules[moduleIndex];
+    
+    // Si el módulo ya está completado, lo marcamos como no completado
+    if (selectedModule.completed) {
+      // Actualizamos el estado local
+      const updatedModules = [...modules];
+      updatedModules[moduleIndex].completed = false;
+      setModules(updatedModules);
+      
+      // Actualizamos localStorage
+      const completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
+      const filteredModules = completedModules.filter(id => id !== selectedModule.id);
+      localStorage.setItem('completedModules', JSON.stringify(filteredModules));
+      
+      console.log(`Módulo ${moduleIndex + 1} marcado como no completado`);
+    } 
+    // Si no está completado y tiene una ruta, navegamos a ella
+    else if (selectedModule.route) {
+      navigate(selectedModule.route);
+    } 
+    // Si no está completado y no tiene ruta, lo marcamos como completado
+    else {
+      // Actualizamos el estado local
+      const updatedModules = [...modules];
+      updatedModules[moduleIndex].completed = true;
+      setModules(updatedModules);
+      
+      // Guardamos en localStorage
+      const completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
+      if (!completedModules.includes(updatedModules[moduleIndex].id)) {
+        completedModules.push(updatedModules[moduleIndex].id);
+        localStorage.setItem('completedModules', JSON.stringify(completedModules));
+      }
+      
+      console.log(`Módulo ${moduleIndex + 1} marcado como completado`);
+    }
   };
 
   const handleLogout = () => {
@@ -103,14 +154,25 @@ const SafetyCourse = () => {
             </div>
           </div>
           <h1 className="course-title">Curso de Seguridad</h1>
-          <p className="module-count">5 módulos</p>
+          <p className="module-count" style={{marginTop:"-15px"}}>4 módulos</p>
         </div>
 
         <div className="progress-section">
+        <div className="module-card"  style={{
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '16px',
+            backgroundColor: '#fff',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            // display: 'flex',
+            // justifyContent: 'space-between',
+            // alignItems: 'center'
+          }}>
           <h2>Su Progreso</h2>
           <div className="progress-info">
             <span>{modules.filter(m => m.completed).length} Módulos completados</span>
-            <span>{calculateProgress().toFixed(0)}%</span>
+            <span style={{fontSize:"26px", fontWeight:"bold"}}>{calculateProgress().toFixed(0)}%</span>
           </div>
           <div className="progress-bar">
             <div 
@@ -118,6 +180,8 @@ const SafetyCourse = () => {
               style={{ width: `${calculateProgress()}%` }}
             ></div>
           </div>
+          </div>
+
         </div>
         
         <div className="modules-section">
@@ -132,33 +196,48 @@ const SafetyCourse = () => {
         <div className="modules-list">
           <h2>Módulos del Curso</h2>
           {modules.map((module, index) => (
-            <div key={index} className="module-item">
+          <div className="module-card" key={index} style={{
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '16px',
+            backgroundColor: '#fff',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+                
               <div className="module-info">
-                <h3>{module.title}</h3>
+                <h3>
+                  {module.title}
+                  {module.completed && <span className="completed-indicator"> ✓</span>}
+                </h3>
                 <p>{module.description}</p>
               </div>
-              <div className="module-actions">
+              <div className="module-actions" style={{marginTop: '-10px'}}>
                 {index < 3 ? (
                   <Button 
                     variant={module.completed ? "secondary" : "primary"}
-                    onClick={() => handleStartModule(index)}
-                    disabled={module.completed}
+                    onClick={() => handleModuleAction(index)}
                     className="start-module-button"
                   >
-                    {module.completed ? 'Completado' : 'Iniciar'}
+                    {module.completed ? 'Desmarcar' : 'Iniciar'}
                   </Button>
                 ) : (
                   <Button 
                     variant={isComplementaryTestAvailable() ? "primary" : "secondary"}
-                    onClick={() => handleStartModule(index)}
+                    onClick={() => handleModuleAction(index)}
                     disabled={!isComplementaryTestAvailable()}
                     className="start-module-button"
                   >
-                    {isComplementaryTestAvailable() ? 'Iniciar' : 'Bloqueado'}
+                    {module.completed ? 'Desmarcar' : (isComplementaryTestAvailable() ? 'Iniciar' : 'Bloqueado')}
                   </Button>
                 )}
               </div>
-            </div>
+            
+              </div>
+          
           ))}
         </div>
       </div>

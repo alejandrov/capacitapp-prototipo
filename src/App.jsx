@@ -12,6 +12,7 @@ import EmpleadoDashboard from './pages/Dashboard/EmpleadoDashboard';
 import EjecutivoDashboard from './pages/Dashboard/EjecutivoDashboard';
 import ExternoDashboard from './pages/Dashboard/ExternoDashboard';
 import SafetyCourse from './pages/Courses/SafetyCourse';
+import RiskIdentificationModule from './pages/Courses/RiskIdentificationModule'; // Nueva importación
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
@@ -70,6 +71,7 @@ function App() {
           <Route path="/dashboard/ejecutivo" element={<EjecutivoDashboard />} />
           <Route path="/dashboard/externo" element={<ExternoDashboard />} />
           <Route path="/courses/safety" element={<SafetyCourse />} />
+          <Route path="/courses/risk-identification" element={<RiskIdentificationModule />} /> {/* Nueva ruta */}
         </Route>
         
         {/* Ruta de 404 */}
