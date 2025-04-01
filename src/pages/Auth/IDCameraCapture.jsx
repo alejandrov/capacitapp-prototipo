@@ -14,10 +14,25 @@ const IDCameraCapture = () => {
 
   // Initialize camera when component mounts
   useEffect(() => {
-    startCamera();
+    // En GitHub Pages, podemos tener problemas con la cámara, así que manejamos eso más agresivamente
+    const isGitHubPages = window.location.hostname.includes('github.io');
     
+    // Intenta iniciar la cámara, pero con un timeout por si hay problemas
+    const cameraPromise = startCamera();
+    
+    // Si estamos en GitHub Pages o en otro entorno que pueda ser problemático,
+    // establecemos un timeout para mostrar la opción de simulación si tarda demasiado
+    const timeoutPromise = new Promise((resolve) => {
+      setTimeout(() => {
+        if (isInitializing && !cameraActive) {
+          setCameraError('No se pudo acceder a la cámara en un tiempo razonable. Puedes usar la simulación para continuar.');
+          setIsInitializing(false);
+        }
+      }, 3000); // 3 segundos de espera máxima
+    });
+    
+    // Limpiar al desmontar
     return () => {
-      // Clean up by stopping all media tracks when component unmounts
       if (videoRef.current && videoRef.current.srcObject) {
         const tracks = videoRef.current.srcObject.getTracks();
         tracks.forEach(track => track.stop());
@@ -63,7 +78,7 @@ const IDCameraCapture = () => {
       }
     } catch (err) {
       console.error('Error accediendo a la cámara:', err);
-      setCameraError(`No se pudo acceder a la cámara: ${err.message}`);
+      setCameraError(`No se pudo acceder a la cámara: ${err.message || 'Error desconocido'}`);
       setCameraActive(false);
       setIsInitializing(false);
     }
@@ -76,8 +91,8 @@ const IDCameraCapture = () => {
     const canvas = canvasRef.current;
     
     // Set canvas dimensions to match video dimensions
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
     
     // Draw current video frame onto the canvas
     const context = canvas.getContext('2d');
@@ -175,15 +190,18 @@ const IDCameraCapture = () => {
                 <div className="camera-error">
                   {isInitializing ? 'Iniciando cámara...' : (cameraError || 'Error al iniciar la cámara')}
                   
-                  {/* Botón para simular captura en entornos de desarrollo */}
+                  {/* Botón para simular captura cuando hay errores o en entornos de desarrollo */}
                   {(!cameraActive && !isInitializing) && (
                     <div style={{ marginTop: '20px' }}>
                       <Button 
-                        variant="secondary" 
+                        variant="primary" 
                         onClick={handleMockCapture}
                       >
-                        Simular Captura (Demo)
+                        Usar Simulación
                       </Button>
+                      <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+                        No podemos acceder a tu cámara. Puedes continuar con una simulación para probar la aplicación.
+                      </p>
                     </div>
                   )}
                 </div>
