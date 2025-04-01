@@ -64,18 +64,41 @@ export const AuthProvider = ({ children }) => {
       console.log('Iniciando sesión con:', email);
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay de red
       
-      // Solo permitimos login con este correo para simular validación
-      if ((email === 'empleado@gmail.com') && password.length > 3) {
-        localStorage.setItem('auth_token', 'fake-token-for-prototype');
-        setCurrentUser({
-          id: '1',
-          name: 'Miguel Villarreal',
-          email: email,
-          role: 'user'
-        });
-        return true;
+      // Validar las diferentes cuentas de usuario
+      if (password.length > 3) {
+        if (email === 'empleado@gmail.com') {
+          localStorage.setItem('auth_token', 'fake-token-for-prototype');
+          setCurrentUser({
+            id: '1',
+            name: 'Miguel Villarreal',
+            email: email,
+            role: 'empleado'
+          });
+          return true;
+        } else if (email === 'ejecutivo@gmail.com') {
+          localStorage.setItem('auth_token', 'fake-token-for-prototype');
+          setCurrentUser({
+            id: '2',
+            name: 'Ana López',
+            email: email,
+            role: 'ejecutivo'
+          });
+          return true;
+        } else if (email === 'externo@gmail.com') {
+          localStorage.setItem('auth_token', 'fake-token-for-prototype');
+          setCurrentUser({
+            id: '3',
+            name: 'Carlos Ramírez',
+            email: email,
+            role: 'externo'
+          });
+          return true;
+        } else {
+          setError('Credenciales incorrectas');
+          return false;
+        }
       } else {
-        setError('Credenciales incorrectas');
+        setError('Contraseña demasiado corta');
         return false;
       }
     } catch (err) {

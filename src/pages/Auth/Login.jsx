@@ -6,7 +6,7 @@ import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated, loading: authLoading, error: authError } = useAuth();
+  const { login, isAuthenticated, loading: authLoading, error: authError, currentUser } = useAuth();
   const [loginError, setLoginError] = useState(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
