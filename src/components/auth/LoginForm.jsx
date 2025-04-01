@@ -75,7 +75,7 @@ const LoginForm = ({ onSubmit, loading = false, error = null }) => {
           </Link>
          
         </div>
-        <small>v10.29</small>
+        <small>v10.41</small>
       </form>
     </div>
   );
