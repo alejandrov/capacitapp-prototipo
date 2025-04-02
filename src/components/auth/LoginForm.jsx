@@ -57,7 +57,7 @@ const LoginForm = ({ onSubmit, loading = false, error = null }) => {
 
         <div className="login-actions">
           <div className="version-forgot-password-container">
-            <span className="version-text">v. 1 4 10:31pm</span>
+            <span className="version-text">v. 2 4 3pm</span>
             <a href="/forgot-password" className="forgot-password">
               Olvidé mi contraseña
             </a>

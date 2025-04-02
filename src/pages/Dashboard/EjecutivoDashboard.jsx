@@ -10,6 +10,7 @@ import {
 import PageHeaderMain from '../../components/common/PageHeaderMain';
 import BottomNavigationEjecutivo from './BottomNavigationEjecutivo';
 import SolicitudesPage from './SolicitudesPage';
+import SolicitudDetalle from './SolicitudDetalle';
 import CursosPage from './CursosPage';
 import EditCursoPage from './EditCursoPage';
 import AddCursoPage from './AddCursoPage';
@@ -144,7 +145,8 @@ const EjecutivoDashboard = () => {
         borderRadius: '12px', 
         padding: '20px', 
         boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-        marginBottom: '20px'
+        marginBottom: '20px',
+        margin: '20px'
       }}>
         <div style={{
           display: 'flex',
@@ -187,20 +189,6 @@ const EjecutivoDashboard = () => {
     </div>
   );
 
-  const renderContent = () => {
-    if (location.pathname.includes('/add-curso')) {
-      return <AddCursoPage />;
-    } else if (location.pathname.includes('/edit-curso')) {
-      return <EditCursoPage />;
-    } else if (location.pathname.includes('/solicitudes')) {
-      return <SolicitudesPage />;
-    } else if (location.pathname.includes('/cursos')) {
-      return <CursosPage />;
-    } else {
-      return renderHomeContent();
-    }
-  };
-
   return (
     <div 
       style={{ 
@@ -211,7 +199,14 @@ const EjecutivoDashboard = () => {
         paddingBottom: '60px' // Espacio para la navegación inferior
       }}
     >
-      {renderContent()}
+      <Routes>
+        <Route path="/" element={renderHomeContent()} />
+        <Route path="/solicitudes" element={<SolicitudesPage />} />
+        <Route path="/solicitudes/:id" element={<SolicitudDetalle />} />
+        <Route path="/cursos" element={<CursosPage />} />
+        <Route path="/edit-curso/:cursoId" element={<EditCursoPage />} />
+        <Route path="/add-curso" element={<AddCursoPage />} />
+      </Routes>
 
       <BottomNavigationEjecutivo 
         activeTab={activeTab} 

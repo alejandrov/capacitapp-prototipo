@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageHeaderMain from "../../components/common/PageHeaderMain";
 
 const SolicitudesPage = () => {
+  const navigate = useNavigate();
   const [filtroEstatus, setFiltroEstatus] = useState("todos");
 
   // Datos de ejemplo para las solicitudes
@@ -70,10 +72,13 @@ const SolicitudesPage = () => {
       ? solicitudes
       : solicitudes.filter((solicitud) => solicitud.estatus === filtroEstatus);
 
+  const handleViewSolicitud = (id) => {
+    navigate(`/dashboard/ejecutivo/solicitudes/${id}`);
+  };
+
   return (
     <div
       style={{
-        // padding: "20px",
         paddingBottom: "80px", // Espacio para el menú inferior
       }}
     >
@@ -236,20 +241,21 @@ const SolicitudesPage = () => {
                 }}
               >
                 <div>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      alert(`Ver detalles de la solicitud ${solicitud.id}`);
-                    }}
+                  <button
+                    onClick={() => handleViewSolicitud(solicitud.id)}
                     style={{
+                      background: "none",
+                      border: "none",
                       color: "#1a1060",
                       textDecoration: "none",
                       fontWeight: "500",
+                      cursor: "pointer",
+                      padding: 0,
+                      textAlign: "left",
                     }}
                   >
                     {solicitud.empleado}
-                  </a>
+                  </button>
                   <div
                     style={{
                       fontSize: "12px",
