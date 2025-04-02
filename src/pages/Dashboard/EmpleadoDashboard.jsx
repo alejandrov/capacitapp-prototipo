@@ -66,15 +66,25 @@ const EmpleadoDashboard = () => {
     navigate('/login');
   };
 
-  const renderHomeContent = () => (
-    <div className="dashboard-content" style={{ paddingTop: 0 }}>
-      {/* Header principal - ahora con estilos homologados */}
-      <PageHeaderMain
-        title="CapacitApp"
-        subtitle="Dashboard"
-        onLogout={handleLogout}
-      />
 
+
+  // La página de mensajes ahora está en su propio componente
+
+  return (
+    <div 
+      style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        height: '100vh', 
+        backgroundColor: '#f5f5f5' 
+      }}
+    >
+      <PageHeaderMain 
+        title="CapacitApp" 
+        subtitle="Bienvenido a tu dashboard" 
+        onLogout={handleLogout} 
+      />
+      
       <div style={{ 
         padding: "20px", 
         display: 'grid', 
@@ -106,21 +116,6 @@ const EmpleadoDashboard = () => {
           </div>
         ))}
       </div>
-    </div>
-  );
-
-  // La página de mensajes ahora está en su propio componente
-
-  return (
-    <div 
-      style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        height: '100vh', 
-        backgroundColor: '#f5f5f5' 
-      }}
-    >
-      {renderHomeContent()}
 
       <BottomNavigation 
         activeTab={activeTab} 
