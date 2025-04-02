@@ -121,6 +121,8 @@ const SafetyCourse = () => {
     setActiveTab(tab);
     if (tab === "home") {
       navigate("/dashboard/empleado");
+    } else if (tab === "messages") {
+      navigate("/dashboard/empleado/messages");
     }
   };
 
@@ -144,14 +146,12 @@ const SafetyCourse = () => {
         backgroundColor: "#f5f5f5",
       }}
     >
-      {/* Reemplazar el header anterior con PageHeaderMain */}
-      <div style={{ position: "static" }}>
-        <PageHeaderMain
-          title="CapacitApp"
-          subtitle="Cursos - Curso de seguridad"
-          onLogout={handleLogout}
-        />
-      </div>
+      {/* Header homologado, sin el div con position: "static" */}
+      <PageHeaderMain
+        title="CapacitApp"
+        subtitle="Cursos - Curso de seguridad"
+        onLogout={handleLogout}
+      />
 
       <div
         className="safety-course-content"

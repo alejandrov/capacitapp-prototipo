@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Home as HomeIcon, 
-  MessageCircle as MessageCircleIcon,
   Settings as GearIcon, 
   Shield as ShieldIcon, 
   Box as BoxIcon, 
@@ -48,40 +46,14 @@ const EmpleadoDashboard = () => {
       description: 'Seguridad industrial',
       route: null
     },
-    { 
-      icon: <GearIcon color="#1a1060" size={32} />, 
-      title: 'Manejo de Químicos', 
-      description: 'Seguridad industrial',
-      route: null
-    },
-    { 
-      icon: <GearIcon color="#1a1060" size={32} />, 
-      title: 'Manejo de Químicos', 
-      description: 'Seguridad industrial',
-      route: null
-    },
-    { 
-      icon: <GearIcon color="#1a1060" size={32} />, 
-      title: 'Manejo de Químicos', 
-      description: 'Seguridad industrial',
-      route: null
-    },
-    { 
-      icon: <GearIcon color="#1a1060" size={32} />, 
-      title: 'Manejo de Químicos', 
-      description: 'Seguridad industrial',
-      route: null
-    },
-    { 
-      icon: <GearIcon color="#1a1060" size={32} />, 
-      title: 'Manejo de Químicos', 
-      description: 'Seguridad industrial',
-      route: null
-    }
+    // Otros elementos...
   ];
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    if (tab === 'messages') {
+      navigate('/dashboard/empleado/messages');
+    }
   };
 
   const handleCourseNavigation = (route) => {
@@ -96,15 +68,15 @@ const EmpleadoDashboard = () => {
 
   const renderHomeContent = () => (
     <div className="dashboard-content" style={{ paddingTop: 0 }}>
-      <div style={{ position: "static" }}>
+      {/* Header principal - ahora con estilos homologados */}
       <PageHeaderMain
-          title="CapacitApp"
-          subtitle="Dashboard"
-          onLogout={handleLogout}
-        />
-      </div>
+        title="CapacitApp"
+        subtitle="Dashboard"
+        onLogout={handleLogout}
+      />
 
-      <div style={{ padding: "20px", 
+      <div style={{ 
+        padding: "20px", 
         display: 'grid', 
         gridTemplateColumns: 'repeat(2, 1fr)', 
         gap: '15px' 
@@ -137,36 +109,7 @@ const EmpleadoDashboard = () => {
     </div>
   );
 
-  // Renderizar la página de mensajes con el PageHeaderMain personalizado
-  const renderMessagesContent = () => (
-    <div className="dashboard-content" style={{ paddingTop: 0 }}>
-      <div style={{ position: "static" }}>
-        <PageHeaderMain 
-          title="Mensajes" 
-          subtitle="Consulta tus mensajes nuevos" 
-          onLogout={handleLogout} 
-        />
-      </div>
-      
-      <div 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '30px',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-          minHeight: '300px',
-          margin: '20px'
-        }}
-      >
-        <p style={{ color: '#999', textAlign: 'center' }}>
-          No hay mensajes por ahora
-        </p>
-      </div>
-    </div>
-  );
+  // La página de mensajes ahora está en su propio componente
 
   return (
     <div 
@@ -177,8 +120,7 @@ const EmpleadoDashboard = () => {
         backgroundColor: '#f5f5f5' 
       }}
     >
-      {activeTab === 'home' && renderHomeContent()}
-      {activeTab === 'messages' && renderMessagesContent()}
+      {renderHomeContent()}
 
       <BottomNavigation 
         activeTab={activeTab} 

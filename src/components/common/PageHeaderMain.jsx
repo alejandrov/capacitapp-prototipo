@@ -3,7 +3,7 @@ import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 /**
- * Componente de cabecera principal para dashboards y páginas principales
+ * Componente de cabecera principal homologado para dashboards y páginas principales
  * Muestra el saludo al usuario, subtítulo opcional y avatar con funcionalidad de logout
  */
 const PageHeaderMain = ({ 
@@ -16,12 +16,10 @@ const PageHeaderMain = ({
   const { currentUser, logout } = useAuth();
 
   const handleLogout = () => {
-    if (onLogout) {
-      onLogout();
-    } else {
-      logout();
+    console.log('Logout clicked');
+    
+    logout();
       navigate('/login');
-    }
   };
 
   return (
@@ -34,7 +32,7 @@ const PageHeaderMain = ({
         justifyContent: 'space-between', 
         alignItems: 'center', 
         marginBottom: '0px',
-        position: 'relative',  // Asegurarse que no sea sticky
+        position: 'relative',
         zIndex: 1,
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
       }}
@@ -45,7 +43,7 @@ const PageHeaderMain = ({
           fontSize: '20px', 
           color: '#1a1060' 
         }}>
-          {title || `Hola, ${currentUser?.name.split(' ')[0]}`}
+          {title || `Hola, ${currentUser?.name?.split(' ')[0] || 'Usuario'}`}
         </h2>
         {(subtitle || subtitle === '') ? (
           <p style={{ 
@@ -94,7 +92,7 @@ const PageHeaderMain = ({
             fontWeight: 'bold' 
           }}
         >
-          {currentUser?.name.charAt(0).toUpperCase()}
+          {currentUser?.name?.charAt(0)?.toUpperCase() || 'U'}
         </div>
       </div>
     </div>
