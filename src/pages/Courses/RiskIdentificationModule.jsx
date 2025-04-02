@@ -132,11 +132,7 @@ const RiskIdentificationModule = () => {
         </div>
       </div>
       
-      {/* Menú de navegación inferior */}
-      <BottomNavigation 
-        activeTab={activeTab} 
-        onTabChange={handleTabChange} 
-      />
+  
     </div>
   );
 };

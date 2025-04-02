@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import VerificationPopup from './VerificationPopup';
 import './ComplementaryTestModule.css';
+import PageHeaderSecondary from '../../components/common/PageHeaderSecondary';
 
 const ComplementaryTestModule = () => {
   const navigate = useNavigate();
@@ -137,15 +138,12 @@ const ComplementaryTestModule = () => {
 
   return (
     <div className="test-module-page">
-      <div className="test-module-header">
-        <Button 
-          variant="text"
-          onClick={handleBackToCourse}
-          className="back-button"
-        >
-          ←
-        </Button>
-        <h1>Prueba Complementaria</h1>
+       <div style={{ padding: '20px 20px' }}>
+        {/* Usando el componente PageHeaderSecondary (antes PageHeader) */}
+        <PageHeaderSecondary 
+          title="Prueba complementaria" 
+          onBack={handleBackToCourse}
+        />
       </div>
       
       <div className="test-module-content">
@@ -179,15 +177,7 @@ const ComplementaryTestModule = () => {
             </p>
             
             <div className="test-actions">
-              {score < 100 && (
-                <Button 
-                  variant="secondary"
-                  onClick={handleResetTest}
-                  className="reset-button"
-                >
-                  Reintentar Prueba
-                </Button>
-              )}
+             
               
               <Button 
                 variant="primary"
@@ -200,7 +190,7 @@ const ComplementaryTestModule = () => {
           </div>
         ) : (
           <div className="test-questions">
-            <p className="test-instructions">
+            <p className="test-instructions" style={{ marginTop: '-30px' }}>
               Selecciona la respuesta correcta para cada pregunta. Necesitas responder todas las preguntas para enviar el examen.
             </p>
             
