@@ -75,7 +75,7 @@ const LoginForm = ({ onSubmit, loading = false, error = null }) => {
           </Link>
          
         </div>
-        <small>v2.59</small>
+        <small>v. 1 4 7pm</small>
       </form>
     </div>
   );
