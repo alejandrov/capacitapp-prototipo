@@ -12,7 +12,12 @@ const BottomNavigation = ({ activeTab, onTabChange }) => {
         justifyContent: 'space-around', 
         padding: '10px', 
         backgroundColor: 'white', 
-        borderTop: '1px solid #ddd' 
+        borderTop: '1px solid #ddd',
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        zIndex: 100
       }}
     >
       <button 

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
+import PageHeader from '../../components/common/PageHeader';
+import BottomNavigation from '../Dashboard/BottomNavigation';
 import './RiskIdentificationModule.css';
 
 const RiskIdentificationModule = () => {
   const navigate = useNavigate();
   const [isModuleCompleted, setIsModuleCompleted] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
 
   // Verificar si el módulo ya está completado al cargar
   useEffect(() => {
@@ -40,17 +43,26 @@ const RiskIdentificationModule = () => {
     }
   };
 
+  // Manejar cambios de tab en la navegación inferior
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'home') {
+      navigate('/dashboard/empleado');
+    } else if (tab === 'messages') {
+      // Aquí podrías navegar a la sección de mensajes
+      // Por ahora, solo cambiamos el estado
+      setActiveTab('messages');
+    }
+  };
+
   return (
-    <div className="risk-module-page">
-      <div className="risk-module-header">
-        <Button 
-          variant="text"
-          onClick={handleBackToCourse}
-          className="back-button"
-        >
-          ←
-        </Button>
-        <h1>Identificación de Riesgos</h1>
+    <div className="risk-module-page" style={{ paddingBottom: '60px' }}>
+      <div style={{ padding: '20px 20px' }}>
+        {/* Usando el nuevo componente PageHeader v2 */}
+        <PageHeader 
+          title="Identificación de Riesgos" 
+          onBack={handleBackToCourse}
+        />
       </div>
       
       <div className="risk-module-content">
@@ -117,10 +129,14 @@ const RiskIdentificationModule = () => {
           >
             {isModuleCompleted ? 'Marcar como no completado' : 'Marcar como completado'}
           </Button>
-          
-          
         </div>
       </div>
+      
+      {/* Menú de navegación inferior */}
+      <BottomNavigation 
+        activeTab={activeTab} 
+        onTabChange={handleTabChange} 
+      />
     </div>
   );
 };

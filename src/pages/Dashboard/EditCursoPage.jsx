@@ -1,55 +1,18 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft as ArrowLeftIcon, Shield as ShieldIcon } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { Shield as ShieldIcon } from 'lucide-react';
+import PageHeader from '../../components/common/PageHeader';
 
 const EditCursoPage = () => {
-  const navigate = useNavigate();
   const { cursoId } = useParams();
-
-  const handleGoBack = () => {
-    // Volver a la página de cursos
-    navigate(-1);
-  };
 
   return (
     <div style={{ 
       padding: '20px',
       paddingBottom: '80px' // Espacio para el menú inferior
     }}>
-      {/* Cabecera con botón de regreso */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '20px'
-      }}>
-        <button
-          onClick={handleGoBack}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            backgroundColor: 'rgba(26, 16, 96, 0.1)',
-            color: '#1a1060',
-            border: 'none',
-            cursor: 'pointer',
-            marginRight: '15px'
-          }}
-        >
-          <ArrowLeftIcon size={20} />
-        </button>
-        
-        <h2 style={{ 
-          margin: 0, 
-          fontSize: '22px', 
-          color: '#1a1060',
-          fontWeight: '600'
-        }}>
-          Editar Curso
-        </h2>
-      </div>
+      {/* Usando el nuevo componente PageHeader */}
+      <PageHeader title="Editar Curso" />
       
       {/* Información básica del curso */}
       <div style={{
