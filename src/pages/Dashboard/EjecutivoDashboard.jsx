@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Routes, Route, useLocation } from 'react-router-dom';
 import { 
   Home as HomeIcon, 
   ClipboardList as ClipboardListIcon,
@@ -10,10 +10,24 @@ import {
 import DashboardHeader from './DashboardHeader';
 import BottomNavigationEjecutivo from './BottomNavigationEjecutivo';
 import SolicitudesPage from './SolicitudesPage';
+import CursosPage from './CursosPage';
+import EditCursoPage from './EditCursoPage';
 
 const EjecutivoDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('home');
+  
+  // Detectar la pestaña activa basada en la URL actual
+  useEffect(() => {
+    if (location.pathname.includes('/solicitudes')) {
+      setActiveTab('solicitudes');
+    } else if (location.pathname.includes('/cursos') || location.pathname.includes('/edit-curso')) {
+      setActiveTab('cursos');
+    } else {
+      setActiveTab('home');
+    }
+  }, [location.pathname]);
 
   // Datos de ejemplo para la gráfica de solicitudes
   const solicitudesData = [
@@ -31,6 +45,15 @@ const EjecutivoDashboard = () => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    
+    // Navegación basada en la pestaña seleccionada
+    if (tab === 'home' && !location.pathname.endsWith('/dashboard/ejecutivo')) {
+      navigate('/dashboard/ejecutivo');
+    } else if (tab === 'solicitudes' && !location.pathname.includes('/solicitudes')) {
+      navigate('/dashboard/ejecutivo/solicitudes');
+    } else if (tab === 'cursos' && !location.pathname.includes('/cursos') && !location.pathname.includes('/edit-curso')) {
+      navigate('/dashboard/ejecutivo/cursos');
+    }
   };
 
   const renderHomeContent = () => (
@@ -151,42 +174,15 @@ const EjecutivoDashboard = () => {
           ))}
         </div>
       </div>
-
-
     </div>
   );
 
-  const renderSolicitudesContent = () => (
-    <SolicitudesPage />
-  );
-
-  const renderCursosContent = () => (
-    <div style={{ 
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: 'calc(100vh - 120px)', // Altura que deja espacio para header y navegación
-      padding: '20px'
-    }}>
-      <h2 style={{ 
-        margin: '0 0 20px', 
-        fontSize: '20px', 
-        color: '#1a1060',
-        textAlign: 'center'
-      }}>
-        Cursos Asignados
-      </h2>
-      
-      <p style={{ 
-        color: '#666', 
-        textAlign: 'center',
-        fontSize: '16px'
-      }}>
-        Esta sección se implementará próximamente
-      </p>
-    </div>
-  );
+  const renderCursosContent = () => {
+    if (location.pathname.includes('/edit-curso')) {
+      return <EditCursoPage />;
+    }
+    return <CursosPage />;
+  };
 
   return (
     <div 
@@ -199,7 +195,7 @@ const EjecutivoDashboard = () => {
       }}
     >
       {activeTab === 'home' && renderHomeContent()}
-      {activeTab === 'solicitudes' && renderSolicitudesContent()}
+      {activeTab === 'solicitudes' && <SolicitudesPage />}
       {activeTab === 'cursos' && renderCursosContent()}
 
       <BottomNavigationEjecutivo 

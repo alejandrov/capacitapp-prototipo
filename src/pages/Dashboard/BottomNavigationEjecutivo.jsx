@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Home as HomeIcon, 
   ClipboardList as ClipboardListIcon,
@@ -6,6 +7,12 @@ import {
 } from 'lucide-react';
 
 const BottomNavigationEjecutivo = ({ activeTab, onTabChange }) => {
+  const navigate = useNavigate();
+
+  const handleTabClick = (tab) => {
+    onTabChange(tab);
+  };
+
   return (
     <div 
       style={{ 
@@ -22,7 +29,7 @@ const BottomNavigationEjecutivo = ({ activeTab, onTabChange }) => {
       }}
     >
       <button 
-        onClick={() => onTabChange('home')}
+        onClick={() => handleTabClick('home')}
         style={{ 
           background: 'none', 
           border: 'none', 
@@ -37,7 +44,7 @@ const BottomNavigationEjecutivo = ({ activeTab, onTabChange }) => {
       </button>
       
       <button 
-        onClick={() => onTabChange('solicitudes')}
+        onClick={() => handleTabClick('solicitudes')}
         style={{ 
           background: 'none', 
           border: 'none', 
@@ -52,7 +59,7 @@ const BottomNavigationEjecutivo = ({ activeTab, onTabChange }) => {
       </button>
       
       <button 
-        onClick={() => onTabChange('cursos')}
+        onClick={() => handleTabClick('cursos')}
         style={{ 
           background: 'none', 
           border: 'none', 

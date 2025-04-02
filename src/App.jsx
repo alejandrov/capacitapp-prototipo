@@ -12,11 +12,11 @@ import EmpleadoDashboard from './pages/Dashboard/EmpleadoDashboard';
 import EjecutivoDashboard from './pages/Dashboard/EjecutivoDashboard';
 import ExternoDashboard from './pages/Dashboard/ExternoDashboard';
 import SafetyCourse from './pages/Courses/SafetyCourse';
-import RiskIdentificationModule from './pages/Courses/RiskIdentificationModule'; // Nueva importación
+import RiskIdentificationModule from './pages/Courses/RiskIdentificationModule';
+import ComplementaryTestModule from './pages/Courses/ComplementaryTestModule';
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
-import ComplementaryTestModule from './pages/Courses/ComplementaryTestModule';
 
 // Componente wrapper para rutas protegidas
 const ProtectedRoute = () => {
@@ -69,12 +69,14 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardRedirect />} />
           <Route path="/dashboard/empleado" element={<EmpleadoDashboard />} />
-          <Route path="/dashboard/ejecutivo" element={<EjecutivoDashboard />} />
+          
+          {/* Rutas para el dashboard del ejecutivo con subrutas */}
+          <Route path="/dashboard/ejecutivo/*" element={<EjecutivoDashboard />} />
+          
           <Route path="/dashboard/externo" element={<ExternoDashboard />} />
           <Route path="/courses/safety" element={<SafetyCourse />} />
-          <Route path="/courses/risk-identification" element={<RiskIdentificationModule />} /> {/* Nueva ruta */}
+          <Route path="/courses/risk-identification" element={<RiskIdentificationModule />} />
           <Route path="/courses/complementary-test" element={<ComplementaryTestModule />} />
-
         </Route>
         
         {/* Ruta de 404 */}
