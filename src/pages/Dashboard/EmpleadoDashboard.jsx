@@ -9,9 +9,8 @@ import {
   Cpu as CpuIcon, 
   Flag as FlagIcon
 } from 'lucide-react';
-import DashboardHeader from './DashboardHeader';
+import PageHeaderMain from '../../components/common/PageHeaderMain';
 import BottomNavigation from './BottomNavigation';
-import MessagesPage from './MessagesPage';
 import './Dashboard.css';
 
 const EmpleadoDashboard = () => {
@@ -48,6 +47,36 @@ const EmpleadoDashboard = () => {
       title: 'Manejo de Químicos', 
       description: 'Seguridad industrial',
       route: null
+    },
+    { 
+      icon: <GearIcon color="#1a1060" size={32} />, 
+      title: 'Manejo de Químicos', 
+      description: 'Seguridad industrial',
+      route: null
+    },
+    { 
+      icon: <GearIcon color="#1a1060" size={32} />, 
+      title: 'Manejo de Químicos', 
+      description: 'Seguridad industrial',
+      route: null
+    },
+    { 
+      icon: <GearIcon color="#1a1060" size={32} />, 
+      title: 'Manejo de Químicos', 
+      description: 'Seguridad industrial',
+      route: null
+    },
+    { 
+      icon: <GearIcon color="#1a1060" size={32} />, 
+      title: 'Manejo de Químicos', 
+      description: 'Seguridad industrial',
+      route: null
+    },
+    { 
+      icon: <GearIcon color="#1a1060" size={32} />, 
+      title: 'Manejo de Químicos', 
+      description: 'Seguridad industrial',
+      route: null
     }
   ];
 
@@ -61,11 +90,21 @@ const EmpleadoDashboard = () => {
     }
   };
 
-  const renderHomeContent = () => (
-    <div className="dashboard-content">
-      <DashboardHeader />
+  const handleLogout = () => {
+    navigate('/login');
+  };
 
-      <div style={{ 
+  const renderHomeContent = () => (
+    <div className="dashboard-content" style={{ paddingTop: 0 }}>
+      <div style={{ position: "static" }}>
+      <PageHeaderMain
+          title="CapacitApp"
+          subtitle="Dashboard"
+          onLogout={handleLogout}
+        />
+      </div>
+
+      <div style={{ padding: "20px", 
         display: 'grid', 
         gridTemplateColumns: 'repeat(2, 1fr)', 
         gap: '15px' 
@@ -98,6 +137,37 @@ const EmpleadoDashboard = () => {
     </div>
   );
 
+  // Renderizar la página de mensajes con el PageHeaderMain personalizado
+  const renderMessagesContent = () => (
+    <div className="dashboard-content" style={{ paddingTop: 0 }}>
+      <div style={{ position: "static" }}>
+        <PageHeaderMain 
+          title="Mensajes" 
+          subtitle="Consulta tus mensajes nuevos" 
+          onLogout={handleLogout} 
+        />
+      </div>
+      
+      <div 
+        style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          backgroundColor: 'white',
+          borderRadius: '12px',
+          padding: '30px',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+          minHeight: '300px',
+          margin: '20px'
+        }}
+      >
+        <p style={{ color: '#999', textAlign: 'center' }}>
+          No hay mensajes por ahora
+        </p>
+      </div>
+    </div>
+  );
+
   return (
     <div 
       style={{ 
@@ -108,7 +178,7 @@ const EmpleadoDashboard = () => {
       }}
     >
       {activeTab === 'home' && renderHomeContent()}
-      {activeTab === 'messages' && <MessagesPage />}
+      {activeTab === 'messages' && renderMessagesContent()}
 
       <BottomNavigation 
         activeTab={activeTab} 

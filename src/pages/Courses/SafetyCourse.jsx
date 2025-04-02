@@ -6,6 +6,7 @@ import {
   Shield as ShieldIcon,
 } from "lucide-react";
 import Button from "../../components/common/Button";
+import PageHeaderMain from "../../components/common/PageHeaderMain";
 import useAuth from "../../hooks/useAuth";
 import "./SafetyCourse.css";
 
@@ -38,15 +39,12 @@ const SafetyCourse = () => {
       completed: false,
       route: null,
     },
-    // Actualización para el archivo SafetyCourse.jsx
-
-    // Busca en el array de módulos el objeto con id: 'test' y actualiza su propiedad route de la siguiente manera:
     {
       id: "test",
       title: "Prueba Complementaria",
       description: "Evaluación final de los conocimientos adquiridos.",
       completed: false,
-      route: "/courses/complementary-test", // Añadir esta ruta
+      route: "/courses/complementary-test",
     },
   ]);
 
@@ -146,13 +144,13 @@ const SafetyCourse = () => {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <div className="dashboard-header">
-        <div className="user-greeting">
-          <h2>Hola, {currentUser?.name.split(" ")[0]}</h2>
-        </div>
-        <div onClick={handleLogout} className="logout-avatar">
-          {currentUser?.name.charAt(0).toUpperCase()}
-        </div>
+      {/* Reemplazar el header anterior con PageHeaderMain */}
+      <div style={{ position: "static" }}>
+        <PageHeaderMain
+          title="CapacitApp"
+          subtitle="Cursos - Curso de seguridad"
+          onLogout={handleLogout}
+        />
       </div>
 
       <div
@@ -160,6 +158,7 @@ const SafetyCourse = () => {
         style={{
           flexGrow: 1,
           overflowY: "auto",
+          padding: "20px",
         }}
       >
         {/* Course Icon and Module Count Section */}
@@ -185,9 +184,6 @@ const SafetyCourse = () => {
               marginBottom: "16px",
               backgroundColor: "#fff",
               boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              // display: 'flex',
-              // justifyContent: 'space-between',
-              // alignItems: 'center'
             }}
           >
             <h2>Su Progreso</h2>

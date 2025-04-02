@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
-import PageHeader from '../../components/common/PageHeader';
+import PageHeaderSecondary from '../../components/common/PageHeaderSecondary';
 import BottomNavigation from '../Dashboard/BottomNavigation';
 import './RiskIdentificationModule.css';
 
@@ -58,8 +58,8 @@ const RiskIdentificationModule = () => {
   return (
     <div className="risk-module-page" style={{ paddingBottom: '60px' }}>
       <div style={{ padding: '20px 20px' }}>
-        {/* Usando el nuevo componente PageHeader v2 */}
-        <PageHeader 
+        {/* Usando el componente PageHeaderSecondary (antes PageHeader) */}
+        <PageHeaderSecondary 
           title="Identificación de Riesgos" 
           onBack={handleBackToCourse}
         />

@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
 /**
- * Componente de cabecera para páginas con título y botón de regreso
- * Ajustado para que coincida con el diseño mostrado en las imágenes
+ * Componente de cabecera secundaria para subpáginas con título y botón de regreso
+ * Se usa para navegación interna dentro de secciones específicas
  */
-const PageHeader = ({ 
+const PageHeaderSecondary = ({ 
   title, 
   onBack, 
   backUrl,
@@ -76,4 +76,4 @@ const PageHeader = ({
   );
 };
 
-export default PageHeader;
+export default PageHeaderSecondary;

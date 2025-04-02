@@ -7,7 +7,7 @@ import {
   BarChart2 as BarChart2Icon,
   Users as UsersIcon
 } from 'lucide-react';
-import DashboardHeader from './DashboardHeader';
+import PageHeaderMain from '../../components/common/PageHeaderMain';
 import BottomNavigationEjecutivo from './BottomNavigationEjecutivo';
 import SolicitudesPage from './SolicitudesPage';
 import CursosPage from './CursosPage';
@@ -56,15 +56,25 @@ const EjecutivoDashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    navigate('/login');
+  };
+
   const renderHomeContent = () => (
-    <div className="dashboard-content" style={{ paddingBottom: '20px' }}>
-      <DashboardHeader />
+    <div className="dashboard-content" style={{ paddingTop: 0, paddingBottom: '20px' }}>
+      <div style={{ position: "static" }}>
+        <PageHeaderMain 
+          subtitle="Panel de administración"
+          onLogout={handleLogout}
+        />
+      </div>
 
       {/* Sección de estadísticas rápidas */}
       <div style={{ 
         display: 'grid', 
         gridTemplateColumns: 'repeat(2, 1fr)', 
         gap: '15px',
+        margin: '20px',
         marginBottom: '20px' 
       }}>
         <div style={{ 

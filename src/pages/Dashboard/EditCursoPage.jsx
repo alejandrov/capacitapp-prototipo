@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Shield as ShieldIcon } from 'lucide-react';
-import PageHeader from '../../components/common/PageHeader';
+import PageHeaderSecondary from '../../components/common/PageHeaderSecondary';
 
 const EditCursoPage = () => {
   const { cursoId } = useParams();
@@ -11,8 +11,8 @@ const EditCursoPage = () => {
       padding: '20px',
       paddingBottom: '80px' // Espacio para el menú inferior
     }}>
-      {/* Usando el nuevo componente PageHeader */}
-      <PageHeader title="Editar Curso" />
+      {/* Usando el componente PageHeaderSecondary (antes PageHeader) */}
+      <PageHeaderSecondary title="Editar Curso" />
       
       {/* Información básica del curso */}
       <div style={{
