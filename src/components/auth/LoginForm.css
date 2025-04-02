@@ -90,3 +90,19 @@
 .register-link:hover {
   text-decoration: underline;
 }
+
+.login-form .login-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.version-forgot-password-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.version-text {
+  font-size: 0.8em;
+  color: #666;
+}
