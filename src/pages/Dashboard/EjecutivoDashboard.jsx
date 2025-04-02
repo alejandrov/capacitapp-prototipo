@@ -12,6 +12,7 @@ import BottomNavigationEjecutivo from './BottomNavigationEjecutivo';
 import SolicitudesPage from './SolicitudesPage';
 import CursosPage from './CursosPage';
 import EditCursoPage from './EditCursoPage';
+import AddCursoPage from './AddCursoPage';
 
 const EjecutivoDashboard = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const EjecutivoDashboard = () => {
   useEffect(() => {
     if (location.pathname.includes('/solicitudes')) {
       setActiveTab('solicitudes');
-    } else if (location.pathname.includes('/cursos') || location.pathname.includes('/edit-curso')) {
+    } else if (location.pathname.includes('/cursos') || location.pathname.includes('/edit-curso') || location.pathname.includes('/add-curso')) {
       setActiveTab('cursos');
     } else {
       setActiveTab('home');
@@ -51,7 +52,7 @@ const EjecutivoDashboard = () => {
       navigate('/dashboard/ejecutivo');
     } else if (tab === 'solicitudes' && !location.pathname.includes('/solicitudes')) {
       navigate('/dashboard/ejecutivo/solicitudes');
-    } else if (tab === 'cursos' && !location.pathname.includes('/cursos') && !location.pathname.includes('/edit-curso')) {
+    } else if (tab === 'cursos' && !location.pathname.includes('/cursos') && !location.pathname.includes('/edit-curso') && !location.pathname.includes('/add-curso')) {
       navigate('/dashboard/ejecutivo/cursos');
     }
   };
@@ -186,11 +187,18 @@ const EjecutivoDashboard = () => {
     </div>
   );
 
-  const renderCursosContent = () => {
-    if (location.pathname.includes('/edit-curso')) {
+  const renderContent = () => {
+    if (location.pathname.includes('/add-curso')) {
+      return <AddCursoPage />;
+    } else if (location.pathname.includes('/edit-curso')) {
       return <EditCursoPage />;
+    } else if (location.pathname.includes('/solicitudes')) {
+      return <SolicitudesPage />;
+    } else if (location.pathname.includes('/cursos')) {
+      return <CursosPage />;
+    } else {
+      return renderHomeContent();
     }
-    return <CursosPage />;
   };
 
   return (
@@ -203,9 +211,7 @@ const EjecutivoDashboard = () => {
         paddingBottom: '60px' // Espacio para la navegación inferior
       }}
     >
-      {activeTab === 'home' && renderHomeContent()}
-      {activeTab === 'solicitudes' && <SolicitudesPage />}
-      {activeTab === 'cursos' && renderCursosContent()}
+      {renderContent()}
 
       <BottomNavigationEjecutivo 
         activeTab={activeTab} 

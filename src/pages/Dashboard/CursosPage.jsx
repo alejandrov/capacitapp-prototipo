@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Shield as ShieldIcon,
   Edit as EditIcon,
+  Plus as PlusIcon,
   Box,
   Flag,
   Cpu,
@@ -65,6 +66,10 @@ const CursosPage = () => {
   const handleEditCurso = (route) => {
     navigate(route);
   };
+  
+  const handleAddCurso = () => {
+    navigate('/dashboard/ejecutivo/add-curso');
+  };
 
   return (
     <div
@@ -81,7 +86,7 @@ const CursosPage = () => {
           padding: "20px",
         }}
       >
-        {/* Header con botón de agregar curso (deshabilitado por ahora) */}
+        {/* Header con botón de agregar curso (AHORA HABILITADO) */}
         <div
           style={{
             display: "flex",
@@ -91,7 +96,7 @@ const CursosPage = () => {
           }}
         >
           <button
-            disabled
+            onClick={handleAddCurso}
             style={{
               display: "flex",
               alignItems: "center",
@@ -104,9 +109,9 @@ const CursosPage = () => {
               fontWeight: "500",
               border: "none",
               cursor: "pointer",
-              opacity: 0.7,
             }}
           >
+            <PlusIcon size={16} />
             Agregar Curso
           </button>
         </div>
