@@ -61,14 +61,13 @@ const EjecutivoDashboard = () => {
   };
 
   const renderHomeContent = () => (
-    <div className="dashboard-content" style={{ paddingTop: 0, paddingBottom: '20px' }}>
-      <div style={{ position: "static" }}>
-        <PageHeaderMain 
+    <div >
+      <PageHeaderMain 
+          title="CapacitApp"
           subtitle="Panel de administración"
           onLogout={handleLogout}
         />
-      </div>
-
+<div className="dashboard-content" style={{ paddingTop: 0, paddingBottom: '20px' }}>
       {/* Sección de estadísticas rápidas */}
       <div style={{ 
         display: 'grid', 
@@ -183,7 +182,7 @@ const EjecutivoDashboard = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div></div>
     </div>
   );
 
