@@ -128,7 +128,7 @@ const SolicitudDetalle = () => {
         <div className="solicitud-header">
           <h2 className="curso-titulo">{solicitud.curso.titulo}</h2>
           <div className="solicitud-metadata">
-            <p className="solicitud-id">Solicitud #{solicitud.id}</p>
+            <p className="solicitud-id">Folio #{solicitud.id}</p>
             <p className="solicitud-fecha">{solicitud.curso.fecha}</p>
           </div>
         </div>

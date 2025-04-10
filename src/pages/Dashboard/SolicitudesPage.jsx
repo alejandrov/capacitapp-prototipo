@@ -213,7 +213,7 @@ const SolicitudesPage = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "3fr 2fr 2fr",
+              gridTemplateColumns: "1fr 3fr 2fr 2fr",
               padding: "15px",
               backgroundColor: "#f5f5f5",
               borderBottom: "1px solid #ddd",
@@ -221,6 +221,7 @@ const SolicitudesPage = () => {
               fontSize: "14px",
             }}
           >
+            <div>Folio</div>
             <div>Empleado</div>
             <div>Curso</div>
             <div>Estatus</div>
@@ -233,13 +234,17 @@ const SolicitudesPage = () => {
                 key={solicitud.id}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "3fr 2fr 2fr",
+                  gridTemplateColumns: "1fr 3fr 2fr 2fr",
                   padding: "15px",
                   borderBottom: "1px solid #eee",
                   fontSize: "14px",
                   alignItems: "center",
                 }}
               >
+                <div style={{ fontWeight: "500" }}>
+                  #{solicitud.id}
+                </div>
+                
                 <div>
                   <button
                     onClick={() => handleViewSolicitud(solicitud.id)}
