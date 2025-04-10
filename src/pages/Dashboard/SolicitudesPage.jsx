@@ -14,6 +14,7 @@ const SolicitudesPage = () => {
       curso: "Seguridad en el Trabajo",
       fecha: "28/03/2025",
       estatus: "pendiente",
+      oportunidad: 2
     },
     {
       id: 2,
@@ -21,6 +22,7 @@ const SolicitudesPage = () => {
       curso: "Manejo de Químicos",
       fecha: "27/03/2025",
       estatus: "aprobado",
+      oportunidad: 1
     },
     {
       id: 3,
@@ -28,6 +30,7 @@ const SolicitudesPage = () => {
       curso: "Seguridad en el Trabajo",
       fecha: "25/03/2025",
       estatus: "rechazado",
+      oportunidad: 3
     },
     {
       id: 4,
@@ -35,6 +38,7 @@ const SolicitudesPage = () => {
       curso: "Ética y Valores",
       fecha: "24/03/2025",
       estatus: "aprobado",
+      oportunidad: 1
     },
     {
       id: 5,
@@ -42,6 +46,7 @@ const SolicitudesPage = () => {
       curso: "Seguridad en el Trabajo",
       fecha: "23/03/2025",
       estatus: "pendiente",
+      oportunidad: 2
     },
     {
       id: 6,
@@ -49,6 +54,7 @@ const SolicitudesPage = () => {
       curso: "Ética y Valores",
       fecha: "22/03/2025",
       estatus: "aprobado",
+      oportunidad: 1
     },
   ];
 
@@ -213,7 +219,7 @@ const SolicitudesPage = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 3fr 2fr 2fr",
+              gridTemplateColumns: "1fr 3fr 2fr 1fr 2fr",
               padding: "15px",
               backgroundColor: "#f5f5f5",
               borderBottom: "1px solid #ddd",
@@ -224,6 +230,7 @@ const SolicitudesPage = () => {
             <div>Folio</div>
             <div>Empleado</div>
             <div>Curso</div>
+            <div>Oportunidad</div>
             <div>Estatus</div>
           </div>
 
@@ -234,7 +241,7 @@ const SolicitudesPage = () => {
                 key={solicitud.id}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 3fr 2fr 2fr",
+                  gridTemplateColumns: "1fr 3fr 2fr 1fr 2fr",
                   padding: "15px",
                   borderBottom: "1px solid #eee",
                   fontSize: "14px",
@@ -273,6 +280,26 @@ const SolicitudesPage = () => {
                 </div>
 
                 <div>{solicitud.curso}</div>
+                
+                <div style={{ textAlign: "center" }}>
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      width: "24px",
+                      height: "24px",
+                      borderRadius: "50%",
+                      backgroundColor:"#1a1060",
+                      color: "white",
+                      textAlign: "center",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "12px",
+                      fontWeight: "500"
+                    }}
+                  >
+                    {solicitud.oportunidad}
+                  </span>
+                </div>
 
                 <div>
                   <span

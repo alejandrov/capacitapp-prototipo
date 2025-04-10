@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import PageHeaderSecondary from '../../components/common/PageHeaderSecondary';
 import DatosEmpleado from './components/DatosEmpleado';
 import ReconocimientoFacial from './components/ReconocimientoFacial';
+import ModulosPrueba from './components/ModulosPrueba';
 import DesglosePrueba from './components/DesglosePrueba';
 import ConfirmationPopup from './components/ConfirmationPopup';
 import './SolicitudDetalle.css';
@@ -28,10 +29,41 @@ const SolicitudDetalle = () => {
       fecha: "28 de marzo de 2025, 15:45",
       estatus: "pendiente"
     },
+    oportunidad: 2,
     reconocimiento: {
       coincidencia: "92%",
       timestamp: "28/03/2025 15:30"
     },
+    modulos: [
+      {
+        id: "identification",
+        titulo: "Identificación de Riesgos",
+        descripcion: "Identificación de riesgos en el área de trabajo",
+        completado: true,
+        fechaCompletado: "27/03/2025"
+      },
+      {
+        id: "protection",
+        titulo: "Equipo de Protección",
+        descripcion: "Uso correcto de equipo de protección personal",
+        completado: true,
+        fechaCompletado: "27/03/2025"
+      },
+      {
+        id: "emergency",
+        titulo: "Procedimientos de Emergencia",
+        descripcion: "Protocolos para situaciones de emergencia",
+        completado: true,
+        fechaCompletado: "28/03/2025"
+      },
+      {
+        id: "test",
+        titulo: "Prueba Complementaria",
+        descripcion: "Evaluación final del curso",
+        completado: true,
+        fechaCompletado: "28/03/2025"
+      }
+    ],
     prueba: {
       titulo: "Prueba Complementaria",
       porcentajeAciertos: 80,
@@ -128,7 +160,37 @@ const SolicitudDetalle = () => {
         <div className="solicitud-header">
           <h2 className="curso-titulo">{solicitud.curso.titulo}</h2>
           <div className="solicitud-metadata">
-            <p className="solicitud-id">Folio #{solicitud.id}</p>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <p className="solicitud-id">Folio #{solicitud.id}</p>
+              <div 
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  marginLeft: '20px',
+                  fontSize: '14px',
+                  color: '#666'
+                }}
+              >
+                <span style={{ marginRight: '8px' }}>Oportunidad:</span>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    backgroundColor: solicitud.oportunidad > 2 ? '#f2f2f2' : '#1a1060',
+                    color: solicitud.oportunidad > 2 ? '#666' : 'white',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '12px',
+                    fontWeight: '500'
+                  }}
+                >
+                  {solicitud.oportunidad}
+                </span>
+              </div>
+            </div>
             <p className="solicitud-fecha">{solicitud.curso.fecha}</p>
           </div>
         </div>
@@ -136,6 +198,7 @@ const SolicitudDetalle = () => {
         <div className="solicitud-content">
           <DatosEmpleado empleado={solicitud.empleado} />
           <ReconocimientoFacial reconocimiento={solicitud.reconocimiento} />
+          <ModulosPrueba modulos={solicitud.modulos} />
           <DesglosePrueba prueba={solicitud.prueba} />
 
           <div className="solicitud-actions">
