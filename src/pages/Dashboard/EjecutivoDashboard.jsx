@@ -7,6 +7,7 @@ import {
   BarChart2 as BarChart2Icon,
   Users as UsersIcon
 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import PageHeaderMain from '../../components/common/PageHeaderMain';
 import BottomNavigationEjecutivo from './BottomNavigationEjecutivo';
 import SolicitudesPage from './SolicitudesPage';
@@ -14,6 +15,7 @@ import SolicitudDetalle from './SolicitudDetalle';
 import CursosPage from './CursosPage';
 import EditCursoPage from './EditCursoPage';
 import AddCursoPage from './AddCursoPage';
+import SolicitudesPorCursoChart from './components/SolicitudesPorCursoChart';
 
 const EjecutivoDashboard = () => {
   const navigate = useNavigate();
@@ -63,129 +65,73 @@ const EjecutivoDashboard = () => {
   };
 
   const renderHomeContent = () => (
-    <div >
+    <div>
       <PageHeaderMain 
           title="CapacitApp"
           subtitle="Panel de administración"
           onLogout={handleLogout}
         />
-<div className="dashboard-content" style={{ paddingTop: 0, paddingBottom: '20px' }}>
-      {/* Sección de estadísticas rápidas */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(2, 1fr)', 
-        gap: '15px',
-        margin: '20px',
-        marginBottom: '20px' 
-      }}>
-        <div style={{ 
-          backgroundColor: 'white', 
-          borderRadius: '12px', 
-          padding: '15px', 
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}>
-          <div style={{ 
-            backgroundColor: 'rgba(26, 16, 96, 0.1)', 
-            borderRadius: '50%',
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: '10px'
-          }}>
-            <UsersIcon color="#1a1060" size={24} />
-          </div>
-          <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>Equipos</h3>
-          <p style={{ 
-            margin: '5px 0 0', 
-            fontSize: '24px', 
-            fontWeight: 'bold',
-            color: '#1a1060' 
-          }}>5</p>
-        </div>
+      <div className="dashboard-content" style={{ paddingTop: 0, paddingBottom: '20px' }}>
+      
+        {/* Nueva Gráfica: Solicitudes por Curso */}
+        <SolicitudesPorCursoChart />
 
+        {/* Gráfica de solicitudes por día */}
         <div style={{ 
           backgroundColor: 'white', 
           borderRadius: '12px', 
-          padding: '15px', 
+          padding: '20px', 
           boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
+          marginBottom: '20px',
+          margin: '20px'
         }}>
-          <div style={{ 
-            backgroundColor: 'rgba(26, 16, 96, 0.1)', 
-            borderRadius: '50%',
-            width: '50px',
-            height: '50px',
+          <div style={{
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '10px'
+            marginBottom: '15px'
           }}>
-            <ClipboardListIcon color="#1a1060" size={24} />
+            <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>Solicitudes Diarias</h3>
+            <div style={{ 
+              color: '#666', 
+              fontSize: '12px',
+              backgroundColor: 'rgba(26, 16, 96, 0.1)',
+              padding: '4px 8px',
+              borderRadius: '12px'
+            }}>
+              Semana actual
+            </div>
           </div>
-          <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>Solicitudes</h3>
-          <p style={{ 
-            margin: '5px 0 0', 
-            fontSize: '24px', 
-            fontWeight: 'bold',
-            color: '#1a1060' 
-          }}>45</p>
+
+          {/* Gráfica de barras con Recharts */}
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart
+              data={solicitudesData}
+              margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis 
+                dataKey="dia" 
+                tick={{ fontSize: 12 }}
+              />
+              <YAxis 
+                tick={{ fontSize: 12 }}
+                tickFormatter={(value) => value}
+              />
+              <Tooltip 
+                formatter={(value) => [`${value} solicitudes`, 'Cantidad']}
+                labelFormatter={(label) => `${label}`}
+              />
+              <Bar 
+                dataKey="cantidad" 
+                fill="#1a1060" 
+                radius={[4, 4, 0, 0]}
+                barSize={30}
+              />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
-
-      {/* Gráfica de solicitudes */}
-      <div style={{ 
-        backgroundColor: 'white', 
-        borderRadius: '12px', 
-        padding: '20px', 
-        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-        marginBottom: '20px',
-        margin: '20px'
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '15px'
-        }}>
-          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>Solicitudes Recibidas</h3>
-          <BarChart2Icon color="#1a1060" size={20} />
-        </div>
-
-        {/* Gráfica de barras simplificada */}
-        <div style={{
-          display: 'flex',
-          height: '200px',
-          alignItems: 'flex-end',
-          justifyContent: 'space-between',
-          marginTop: '20px'
-        }}>
-          {solicitudesData.map((item, index) => (
-            <div key={index} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              flex: '1'
-            }}>
-              <div style={{
-                height: `${(item.cantidad / maxSolicitudes) * 160}px`,
-                width: '70%',
-                backgroundColor: '#1a1060',
-                borderRadius: '4px 4px 0 0',
-                marginBottom: '10px'
-              }}></div>
-              <span style={{ fontSize: '12px', color: '#666' }}>{item.dia}</span>
-              <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{item.cantidad}</span>
-            </div>
-          ))}
-        </div>
-      </div></div>
     </div>
   );
 
