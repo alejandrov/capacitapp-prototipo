@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Home as HomeIcon, 
   ClipboardList as ClipboardListIcon,
-  BookOpen as BookOpenIcon
+  BookOpen as BookOpenIcon,
+  Users as UsersIcon
 } from 'lucide-react';
 
 const BottomNavigationEjecutivo = ({ activeTab, onTabChange }) => {
@@ -71,6 +72,21 @@ const BottomNavigationEjecutivo = ({ activeTab, onTabChange }) => {
       >
         <BookOpenIcon size={24} />
         <span style={{ fontSize: '12px', marginTop: '5px' }}>Cursos</span>
+      </button>
+
+      <button 
+        onClick={() => handleTabClick('padron')}
+        style={{ 
+          background: 'none', 
+          border: 'none', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center',
+          color: activeTab === 'padron' ? '#1a1060' : '#666' 
+        }}
+      >
+        <UsersIcon size={24} />
+        <span style={{ fontSize: '12px', marginTop: '5px' }}>Padrón</span>
       </button>
     </div>
   );

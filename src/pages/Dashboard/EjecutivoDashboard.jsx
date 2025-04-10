@@ -15,6 +15,7 @@ import SolicitudDetalle from './SolicitudDetalle';
 import CursosPage from './CursosPage';
 import EditCursoPage from './EditCursoPage';
 import AddCursoPage from './AddCursoPage';
+import PadronPage from './PadronPage';  // Import the new component
 import SolicitudesPorCursoChart from './components/SolicitudesPorCursoChart';
 
 const EjecutivoDashboard = () => {
@@ -28,6 +29,8 @@ const EjecutivoDashboard = () => {
       setActiveTab('solicitudes');
     } else if (location.pathname.includes('/cursos') || location.pathname.includes('/edit-curso') || location.pathname.includes('/add-curso')) {
       setActiveTab('cursos');
+    } else if (location.pathname.includes('/padron')) {
+      setActiveTab('padron');
     } else {
       setActiveTab('home');
     }
@@ -57,6 +60,8 @@ const EjecutivoDashboard = () => {
       navigate('/dashboard/ejecutivo/solicitudes');
     } else if (tab === 'cursos' && !location.pathname.includes('/cursos') && !location.pathname.includes('/edit-curso') && !location.pathname.includes('/add-curso')) {
       navigate('/dashboard/ejecutivo/cursos');
+    } else if (tab === 'padron' && !location.pathname.includes('/padron')) {
+      navigate('/dashboard/ejecutivo/padron');
     }
   };
 
@@ -152,6 +157,7 @@ const EjecutivoDashboard = () => {
         <Route path="/cursos" element={<CursosPage />} />
         <Route path="/edit-curso/:cursoId" element={<EditCursoPage />} />
         <Route path="/add-curso" element={<AddCursoPage />} />
+        <Route path="/padron" element={<PadronPage />} />
       </Routes>
 
       <BottomNavigationEjecutivo 
