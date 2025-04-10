@@ -182,8 +182,8 @@ const MessagesPage = () => {
               onClick={() => {
                 // Create a temporary link element to trigger download
                 const link = document.createElement('a');
-                link.href = '/capacitapp-prototipo/tarjeton.png'; // Adjusted for GitHub Pages base path
-                link.download = 'tarjeton.png';
+                link.href = '/capacitapp-prototipo/tarjeton.jpg'; // Adjusted for GitHub Pages base path
+                link.download = 'tarjeton.jpg';
                 link.click();
               }}
               style={{
