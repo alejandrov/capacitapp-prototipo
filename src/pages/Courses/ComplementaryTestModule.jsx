@@ -20,6 +20,10 @@ const ComplementaryTestModule = () => {
   const [score, setScore] = useState(0);
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [isIdentityVerified, setIsIdentityVerified] = useState(false);
+  // Nuevo estado para seguir si ya se ha hecho la verificación intermedia
+  const [midwayVerificationDone, setMidwayVerificationDone] = useState(false);
+  // Estado para rastrear si debemos mostrar la verificación al finalizar o en intermedio
+  const [isIntermediateVerification, setIsIntermediateVerification] = useState(false);
 
   // Verificar si el módulo ya está completado al cargar
   useEffect(() => {
@@ -32,6 +36,17 @@ const ComplementaryTestModule = () => {
     const allAnswered = Object.values(answers).every(answer => answer !== '');
     setIsAllAnswered(allAnswered);
   }, [answers]);
+
+  // Efecto para verificar si se han respondido 3 preguntas
+  useEffect(() => {
+    const answeredCount = Object.values(answers).filter(answer => answer !== '').length;
+    
+    // Si han respondido exactamente 3 preguntas y aún no se ha hecho la verificación intermedia
+    if (answeredCount === 3 && !midwayVerificationDone && !isIdentityVerified) {
+      setIsIntermediateVerification(true);
+      setShowVerificationPopup(true);
+    }
+  }, [answers, midwayVerificationDone, isIdentityVerified]);
 
   // Función para manejar la selección de respuestas
   const handleAnswerSelection = (questionId, answer) => {
@@ -67,39 +82,66 @@ const ComplementaryTestModule = () => {
     return (correctCount / 5) * 100;
   };
 
-  // Función para iniciar el proceso de verificación de identidad como sorpresa antes de terminar
+  // Función para iniciar el proceso de verificación de identidad 
   const handleStartVerification = () => {
-    // Mostrar el popup de verificación sin previo aviso
+    // Mostrar el popup de verificación (será verificación final)
+    setIsIntermediateVerification(false);
     setShowVerificationPopup(true);
   };
 
   // Función para manejar cuando se completa la verificación
   const handleVerificationComplete = (success) => {
     setShowVerificationPopup(false);
+    
     if (success) {
-      setIsIdentityVerified(true);
-      // Mostrar un mensaje efímero para indicar que la verificación fue exitosa
-      const verificationMessage = document.createElement('div');
-      verificationMessage.className = 'verification-success-message';
-      verificationMessage.textContent = '¡Identidad verificada! Ahora puedes terminar la prueba.';
-      document.body.appendChild(verificationMessage);
-      
-      setTimeout(() => {
-        verificationMessage.classList.add('show');
-      }, 100);
-      
-      setTimeout(() => {
-        verificationMessage.classList.remove('show');
+      if (isIntermediateVerification) {
+        // Si era la verificación intermedia, marcamos que se ha completado
+        setMidwayVerificationDone(true);
+        setIsIntermediateVerification(false);
+        
+        // Mensaje temporal para verificación intermedia
+        const verificationMessage = document.createElement('div');
+        verificationMessage.className = 'verification-success-message';
+        verificationMessage.textContent = '¡Verificación intermedia exitosa! Puedes continuar con el examen.';
+        document.body.appendChild(verificationMessage);
+        
         setTimeout(() => {
-          document.body.removeChild(verificationMessage);
-        }, 500);
-      }, 3000);
+          verificationMessage.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+          verificationMessage.classList.remove('show');
+          setTimeout(() => {
+            document.body.removeChild(verificationMessage);
+          }, 500);
+        }, 3000);
+      } else {
+        // Verificación final exitosa
+        setIsIdentityVerified(true);
+        
+        // Mostrar un mensaje efímero para indicar que la verificación fue exitosa
+        const verificationMessage = document.createElement('div');
+        verificationMessage.className = 'verification-success-message';
+        verificationMessage.textContent = '¡Identidad verificada! Ahora puedes terminar la prueba.';
+        document.body.appendChild(verificationMessage);
+        
+        setTimeout(() => {
+          verificationMessage.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+          verificationMessage.classList.remove('show');
+          setTimeout(() => {
+            document.body.removeChild(verificationMessage);
+          }, 500);
+        }, 3000);
+      }
     }
   };
 
   // Función para manejar la finalización del examen
   const handleFinishTest = () => {
-    // Solo si se ha verificado la identidad
+    // Solo si se ha verificado la identidad al final
     if (isIdentityVerified) {
       const testScore = calculateScore();
       setScore(testScore);
@@ -115,8 +157,8 @@ const ComplementaryTestModule = () => {
         setIsModuleCompleted(true);
       }
     } else {
-      // Si intenta terminar sin verificar, mostrar un mensaje
-      alert('Primero debes verificar tu identidad para terminar la prueba.');
+      // Si intenta terminar sin verificar, inicia el proceso de verificación final
+      handleStartVerification();
     }
   };
 
@@ -131,6 +173,7 @@ const ComplementaryTestModule = () => {
     });
     setShowResults(false);
     setIsIdentityVerified(false); // Restablecer el estado de verificación de identidad
+    setMidwayVerificationDone(false); // Restablecer la verificación intermedia
     
     // No es necesario borrar del localStorage ya que el módulo no se marcó como completado
     // al no haber aprobado la prueba
@@ -401,13 +444,24 @@ const ComplementaryTestModule = () => {
             </div>
             
             {/* Estado de verificación */}
-            {isIdentityVerified && (
-              <div className="verification-status">
-                <div className="verification-badge">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {(isIdentityVerified || midwayVerificationDone) && (
+              <div className="verification-status" style={{ marginTop: '20px', textAlign: 'center' }}>
+                <div className="verification-badge" style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center',
+                  padding: '8px 16px',
+                  backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                  borderRadius: '20px',
+                  color: '#4CAF50'
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px' }}>
                     <path d="M8 0C3.6 0 0 3.6 0 8C0 12.4 3.6 16 8 16C12.4 16 16 12.4 16 8C16 3.6 12.4 0 8 0ZM6.4 12L2.4 8L3.8 6.6L6.4 9.2L12.2 3.4L13.6 4.8L6.4 12Z" fill="#4CAF50"/>
                   </svg>
-                  <span>Identidad verificada</span>
+                  <span>
+                    {isIdentityVerified 
+                      ? "Identidad verificada completamente" 
+                      : "Verificación intermedia completada"}
+                  </span>
                 </div>
               </div>
             )}

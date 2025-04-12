@@ -55,15 +55,7 @@ const LoginForm = ({ onSubmit, loading = false, error = null }) => {
           />
         </div>
 
-        <div className="login-actions">
-          <div className="version-forgot-password-container">
-            <span className="version-text">v. 10 4 12pm</span>
-            <a href="/forgot-password" className="forgot-password">
-              Olvidé mi contraseña
-            </a>
-          </div>
-        </div>
-
+    
         <Button type="submit" variant="primary" fullWidth disabled={loading}>
           {loading ? "CARGANDO..." : "LOGIN"}
         </Button>
