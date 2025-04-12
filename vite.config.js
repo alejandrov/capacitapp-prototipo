@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/capacitapp-prototipo/', // Add this line (use your repository name)
+  // Quitado el base: '/capacitapp-prototipo/' que era específico para GitHub Pages
   plugins: [
     react(),
     VitePWA({

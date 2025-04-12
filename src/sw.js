@@ -13,9 +13,9 @@ self.__WB_MANIFEST;
 // Caché de recursos estáticos
 const CACHE_NAME = "capacitapp-v1";
 const urlsToCache = [
-  "/capacitapp-prototipo/", // Updated to match repository name
-  "/capacitapp-prototipo/index.html", // Updated to match repository name
-  "/capacitapp-prototipo/manifest.json", // Updated to match repository name
+  "/",
+  "/index.html",
+  "/manifest.json",
 ];
 
 // Evento de instalación
