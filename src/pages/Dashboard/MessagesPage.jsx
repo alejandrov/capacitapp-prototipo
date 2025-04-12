@@ -8,23 +8,34 @@ const MessagesPage = () => {
   const [activeTab, setActiveTab] = useState('messages');
   const [selectedMessage, setSelectedMessage] = useState(null);
 
-  // Sample messages
+  // Sample messages - ACTUALIZADO con tres mensajes
   const messages = [
     {
       id: 1,
       title: 'Resultados de la prueba - Curso de Seguridad',
       date: '28 de marzo de 2025, 15:45',
       excerpt: 'Su resultado en el curso de seguridad ha sido...',
-      fullContent: `Estimado Miguel Villarreal,\n\nNos complace informarle que ha APROBADO satisfactoriamente el Curso de Seguridad. Su compromiso con los protocolos de seguridad industrial ha quedado demostrado a través de su desempeño en la evaluación.\n\nFelicitaciones por completar exitosamente este importante curso.`,
-      status: 'approved'
+      fullContent: `Estimado Miguel Villarreal,\n\nNos complace informarle que ha APROBADO satisfactoriamente el Curso de Seguridad. Su compromiso con los protocolos de seguridad industrial ha quedado demostrado a través de su desempeño en la evaluación.\n\nSu tarjetón ha sido validado y firmado por el ejecutivo a cargo. Ya puede descargar su comprobante a continuación.\n\nFelicitaciones por completar exitosamente este importante curso.`,
+      status: 'approved',
+      validated: true
     },
     {
       id: 2,
+      title: 'Resultados pendientes - Curso de Seguridad',
+      date: '27 de marzo de 2025, 16:30',
+      excerpt: 'Su resultado en el curso de seguridad ha sido aprobado y está pendiente de validación...',
+      fullContent: `Estimado Miguel Villarreal,\n\nNos complace informarle que ha APROBADO satisfactoriamente el Curso de Seguridad. Su compromiso con los protocolos de seguridad industrial ha quedado demostrado a través de su desempeño en la evaluación.\n\nSu solicitud se encuentra actualmente en revisión por parte del ejecutivo a cargo. Una vez que su tarjetón sea validado y firmado, recibirá una notificación para poder descargarlo.\n\nFelicitaciones por completar exitosamente este importante curso.`,
+      status: 'pending',
+      validated: false
+    },
+    {
+      id: 3,
       title: 'Resultados de la prueba - Curso de Seguridad',
       date: '25 de marzo de 2025, 10:30',
       excerpt: 'Lamentablemente, su resultado en el curso de seguridad...',
       fullContent: `Estimado Miguel Villarreal,\n\nLamentamos informarle que NO HA APROBADO el Curso de Seguridad en esta ocasión. Es importante que revise nuevamente los materiales del curso y prepare con mayor dedicación para el próximo intento.\n\nPuntuación: 55/100\nEstatus: REPROBADO\n\nLe recomendamos repasar los módulos de identificación de riesgos y procedimientos de emergencia.`,
-      status: 'rejected'
+      status: 'rejected',
+      validated: false
     }
   ];
 
@@ -75,7 +86,8 @@ const MessagesPage = () => {
           <div 
             style={{ 
               marginRight: '15px',
-              color: message.status === 'approved' ? '#4CAF50' : '#F44336'
+              color: message.status === 'approved' ? '#4CAF50' : 
+                     message.status === 'pending' ? '#FFA000' : '#F44336'
             }}
           >
             <svg 
@@ -93,6 +105,12 @@ const MessagesPage = () => {
                 <>
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                   <polyline points="22 4 12 14.01 9 11.01" />
+                </>
+              ) : message.status === 'pending' ? (
+                <>
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
                 </>
               ) : (
                 <>
@@ -138,7 +156,8 @@ const MessagesPage = () => {
           <h2 style={{ 
             margin: 0, 
             fontSize: '20px', 
-            color: selectedMessage.status === 'approved' ? '#4CAF50' : '#F44336' 
+            color: selectedMessage.status === 'approved' ? '#4CAF50' : 
+                  selectedMessage.status === 'pending' ? '#FFA000' : '#F44336'
           }}>
             {selectedMessage.title}
           </h2>
@@ -172,7 +191,8 @@ const MessagesPage = () => {
           {selectedMessage.fullContent}
         </div>
 
-        {selectedMessage.status === 'approved' && (
+        {/* Solo mostrar el botón de descarga si está aprobado Y validado */}
+        {selectedMessage.status === 'approved' && selectedMessage.validated && (
           <div style={{ 
             marginTop: '20px', 
             display: 'flex', 
@@ -217,6 +237,38 @@ const MessagesPage = () => {
               </svg>
               Descargar Tarjetón
             </button>
+          </div>
+        )}
+        
+        {/* Mostrar mensaje de validación pendiente */}
+        {selectedMessage.status === 'approved' && !selectedMessage.validated && (
+          <div style={{ 
+            marginTop: '20px', 
+            padding: '15px',
+            backgroundColor: 'rgba(255, 160, 0, 0.1)',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="#FFA000" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span style={{ fontSize: '14px', color: '#FFA000' }}>
+              Pendiente de validación por el ejecutivo
+            </span>
           </div>
         )}
       </div>
