@@ -4,7 +4,11 @@ import {
   UserX as UserXIcon,
   Plus as PlusIcon,
   Search as SearchIcon,
-  Filter as FilterIcon
+  Filter as FilterIcon,
+  BookOpen as BookIcon,
+  Check as CheckIcon,
+  Edit as EditIcon,
+  X as XIcon
 } from "lucide-react";
 import PageHeaderMain from "../../components/common/PageHeaderMain";
 
@@ -19,6 +23,22 @@ const PadronPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [curpsFiltrados, setCurpsFiltrados] = useState([]);
 
+  // Estado para la selección de cursos
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [isCoursesDropdownOpen, setIsCoursesDropdownOpen] = useState(false);
+  const [editingCurpId, setEditingCurpId] = useState(null);
+  const [editingCourses, setEditingCourses] = useState([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  // Lista de cursos disponibles
+  const availableCourses = [
+    { id: "seguridad", name: "Seguridad en el Trabajo" },
+    { id: "quimicos", name: "Manejo de Químicos" },
+    { id: "etica", name: "Ética y Valores" },
+    { id: "almacen", name: "Almacén" },
+    { id: "psicometrico", name: "Psicométrico" }
+  ];
+
   // Cargar CURPs al montar el componente
   useEffect(() => {
     // Simulamos cargar datos de localStorage o usamos datos de ejemplo
@@ -29,16 +49,16 @@ const PadronPage = () => {
     } else {
       // CURPs de ejemplo con diferentes estados
       const exampleCurps = [
-        { curp: "MELM8305281HDFNNS09", registrado: true },
-        { curp: "PERC971212MDFRZR08", registrado: false },
-        { curp: "GORJ850624HCHMVN04", registrado: true },
-        { curp: "SAHS901122MDFLRR01", registrado: false },
-        { curp: "OELB810702HDFRPR03", registrado: false },
-        { curp: "HERF650327MDFRYL09", registrado: true },
-        { curp: "MAAA880814HCHRLN09", registrado: false },
-        { curp: "TOGL720621MDFRRR02", registrado: false },
-        { curp: "LUFA001115HQTRRL01", registrado: false },
-        { curp: "ROOA010504HTSJDA7", registrado: false },
+        { curp: "MELM8305281HDFNNS09", registrado: true, cursos: ["seguridad", "etica"] },
+        { curp: "PERC971212MDFRZR08", registrado: false, cursos: ["seguridad"] },
+        { curp: "GORJ850624HCHMVN04", registrado: true, cursos: ["seguridad", "quimicos", "psicometrico"] },
+        { curp: "SAHS901122MDFLRR01", registrado: false, cursos: ["almacen"] },
+        { curp: "OELB810702HDFRPR03", registrado: false, cursos: ["seguridad"] },
+        { curp: "HERF650327MDFRYL09", registrado: true, cursos: ["etica", "psicometrico"] },
+        { curp: "MAAA880814HCHRLN09", registrado: false, cursos: ["seguridad"] },
+        { curp: "TOGL720621MDFRRR02", registrado: false, cursos: ["seguridad", "quimicos"] },
+        { curp: "LUFA001115HQTRRL01", registrado: false, cursos: ["almacen", "etica"] },
+        { curp: "ROOA010504HTSJDA7", registrado: false, cursos: ["seguridad"] },
       ];
       
       setCurps(exampleCurps);
@@ -84,7 +104,8 @@ const PadronPage = () => {
     // Crear objetos CURP y añadirlos al estado
     const newCurpsObjects = newCurpsArray.map(curp => ({
       curp: curp,
-      registrado: false
+      registrado: false,
+      cursos: [...selectedCourses] // Asignar los cursos seleccionados
     }));
     
     // Actualizar el estado y localStorage
@@ -94,6 +115,7 @@ const PadronPage = () => {
     
     // Limpiar el formulario y mostrar mensaje de éxito
     setFormCurps("");
+    // No limpiamos los cursos seleccionados para facilitar agregar varios CURPs con los mismos cursos
     setShowSuccessMessage(true);
     
     // Ocultar el mensaje después de 3 segundos
@@ -136,6 +158,65 @@ const PadronPage = () => {
       setCurps(updatedCurps);
       localStorage.setItem("padronCurps", JSON.stringify(updatedCurps));
     }
+  };
+
+  // Manejar selección de cursos en el formulario principal
+  const handleCourseSelect = (courseId) => {
+    if (selectedCourses.includes(courseId)) {
+      // Si ya está seleccionado, lo quitamos
+      setSelectedCourses(prev => prev.filter(id => id !== courseId));
+    } else {
+      // Si no está seleccionado, lo añadimos
+      setSelectedCourses(prev => [...prev, courseId]);
+    }
+  };
+
+  // Manejar selección de cursos en el modal de edición
+  const handleEditCourseSelect = (courseId) => {
+    if (editingCourses.includes(courseId)) {
+      // Si ya está seleccionado, lo quitamos
+      setEditingCourses(prev => prev.filter(id => id !== courseId));
+    } else {
+      // Si no está seleccionado, lo añadimos
+      setEditingCourses(prev => [...prev, courseId]);
+    }
+  };
+
+  // Abrir modal para editar cursos de un CURP
+  const handleOpenEditCourses = (curpId) => {
+    const curpItem = curps.find(item => item.curp === curpId);
+    if (curpItem) {
+      setEditingCurpId(curpId);
+      setEditingCourses(curpItem.cursos || []);
+      setIsEditModalOpen(true);
+    }
+  };
+
+  // Guardar cambios en los cursos de un CURP
+  const handleSaveEditCourses = () => {
+    if (!editingCurpId) return;
+    
+    const updatedCurps = curps.map(item => {
+      if (item.curp === editingCurpId) {
+        return { ...item, cursos: [...editingCourses] };
+      }
+      return item;
+    });
+    
+    setCurps(updatedCurps);
+    localStorage.setItem("padronCurps", JSON.stringify(updatedCurps));
+    
+    // Cerrar el modal y limpiar estados
+    setIsEditModalOpen(false);
+    setEditingCurpId(null);
+    setEditingCourses([]);
+  };
+
+  // Cancelar edición de cursos
+  const handleCancelEditCourses = () => {
+    setIsEditModalOpen(false);
+    setEditingCurpId(null);
+    setEditingCourses([]);
   };
 
   return (
@@ -206,6 +287,165 @@ const PadronPage = () => {
                   resize: "vertical",
                 }}
               />
+            </div>
+            
+            {/* Selector de cursos disponibles */}
+            <div style={{ marginBottom: "20px" }}>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#666",
+                  marginBottom: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <BookIcon size={16} color="#666" />
+                Selecciona los cursos que podrán visualizar:
+              </p>
+              
+              <div style={{ position: "relative" }}>
+                <div 
+                  onClick={() => setIsCoursesDropdownOpen(!isCoursesDropdownOpen)}
+                  style={{
+                    border: "1px solid #ddd",
+                    borderRadius: "8px",
+                    padding: "12px",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    backgroundColor: "white"
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ fontSize: "14px", color: selectedCourses.length > 0 ? "#333" : "#888" }}>
+                      {selectedCourses.length > 0 
+                        ? `${selectedCourses.length} curso${selectedCourses.length !== 1 ? 's' : ''} seleccionado${selectedCourses.length !== 1 ? 's' : ''}`
+                        : "Seleccionar cursos disponibles"}
+                    </span>
+                  </div>
+                  <svg 
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="#666" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                    style={{ 
+                      transition: "transform 0.2s ease",
+                      transform: isCoursesDropdownOpen ? "rotate(180deg)" : "rotate(0deg)"
+                    }}
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+                
+                {isCoursesDropdownOpen && (
+                  <div style={{
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    right: 0,
+                    backgroundColor: "white",
+                    border: "1px solid #ddd",
+                    borderRadius: "8px",
+                    marginTop: "5px",
+                    zIndex: 10,
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                    maxHeight: "200px",
+                    overflowY: "auto"
+                  }}>
+                    {availableCourses.map(course => (
+                      <div 
+                        key={course.id}
+                        onClick={() => handleCourseSelect(course.id)}
+                        style={{
+                          padding: "10px 12px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          transition: "background-color 0.2s ease",
+                          backgroundColor: selectedCourses.includes(course.id) ? "rgba(26, 16, 96, 0.05)" : "white",
+                          ":hover": {
+                            backgroundColor: "rgba(26, 16, 96, 0.05)"
+                          }
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(26, 16, 96, 0.05)"}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = selectedCourses.includes(course.id) ? "rgba(26, 16, 96, 0.05)" : "white"}
+                      >
+                        <span style={{ fontSize: "14px" }}>{course.name}</span>
+                        {selectedCourses.includes(course.id) && (
+                          <CheckIcon size={16} color="#1a1060" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {/* Mostrar cursos seleccionados como chips/tags */}
+              {selectedCourses.length > 0 && (
+                <div style={{ 
+                  display: "flex", 
+                  flexWrap: "wrap", 
+                  gap: "8px",
+                  marginTop: "10px" 
+                }}>
+                  {selectedCourses.map(courseId => {
+                    const course = availableCourses.find(c => c.id === courseId);
+                    return (
+                      <div 
+                        key={courseId}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          backgroundColor: "rgba(26, 16, 96, 0.1)",
+                          color: "#1a1060",
+                          padding: "4px 10px",
+                          borderRadius: "16px",
+                          fontSize: "12px",
+                          fontWeight: "500"
+                        }}
+                      >
+                        <span>{course?.name}</span>
+                        <button
+                          type="button" 
+                          onClick={() => handleCourseSelect(courseId)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: "0",
+                            display: "flex",
+                            alignItems: "center",
+                            color: "#1a1060"
+                          }}
+                        >
+                          <svg 
+                            width="14" 
+                            height="14" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
             
             <button
@@ -431,6 +671,7 @@ const PadronPage = () => {
                     style={{
                       padding: "12px 15px",
                       textAlign: "left",
+                      width: "25%"
                     }}
                   >
                     CURP
@@ -438,7 +679,17 @@ const PadronPage = () => {
                   <th
                     style={{
                       padding: "12px 15px",
+                      textAlign: "left",
+                      width: "35%"
+                    }}
+                  >
+                    Cursos Asignados
+                  </th>
+                  <th
+                    style={{
+                      padding: "12px 15px",
                       textAlign: "center",
+                      width: "15%"
                     }}
                   >
                     Estado
@@ -447,6 +698,7 @@ const PadronPage = () => {
                     style={{
                       padding: "12px 15px",
                       textAlign: "right",
+                      width: "25%"
                     }}
                   >
                     Acciones
@@ -469,6 +721,84 @@ const PadronPage = () => {
                       }}
                     >
                       {item.curp}
+                    </td>
+                    <td
+                      style={{
+                        padding: "12px 15px",
+                      }}
+                    >
+                      <div style={{ 
+                        display: "flex", 
+                        flexWrap: "wrap", 
+                        gap: "5px",
+                        alignItems: "center"
+                      }}>
+                        {item.cursos && item.cursos.length > 0 ? (
+                          <>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                              {item.cursos.map(courseId => {
+                                const course = availableCourses.find(c => c.id === courseId);
+                                return course ? (
+                                  <div 
+                                    key={courseId}
+                                    style={{
+                                      backgroundColor: "rgba(26, 16, 96, 0.05)",
+                                      color: "#1a1060",
+                                      padding: "3px 8px",
+                                      borderRadius: "12px",
+                                      fontSize: "12px",
+                                    }}
+                                  >
+                                    {course.name}
+                                  </div>
+                                ) : null;
+                              })}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEditCourses(item.curp)}
+                              style={{
+                                background: "none",
+                                border: "none",
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                                color: "#1a1060",
+                                padding: "3px",
+                                borderRadius: "50%",
+                                backgroundColor: "rgba(26, 16, 96, 0.05)",
+                              }}
+                              title="Editar cursos"
+                            >
+                              <EditIcon size={14} />
+                            </button>
+                          </>
+                        ) : (
+                          <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                            <span style={{ color: "#999", fontStyle: "italic" }}>
+                              Sin cursos asignados
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEditCourses(item.curp)}
+                              style={{
+                                background: "none",
+                                border: "none",
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                                color: "#1a1060",
+                                padding: "3px",
+                                borderRadius: "50%",
+                                backgroundColor: "rgba(26, 16, 96, 0.05)",
+                              }}
+                              title="Asignar cursos"
+                            >
+                              <PlusIcon size={14} />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td
                       style={{
@@ -503,7 +833,7 @@ const PadronPage = () => {
                           </>
                         )}
                       </div>
-                    </td>
+                      </td>
                     <td
                       style={{
                         padding: "12px 15px",
@@ -630,6 +960,215 @@ const PadronPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal de edición de cursos */}
+      {isEditModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              borderRadius: "12px",
+              padding: "20px",
+              width: "90%",
+              maxWidth: "500px",
+              boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
+            }}
+          >
+            <div style={{ 
+              display: "flex", 
+              justifyContent: "space-between", 
+              alignItems: "center",
+              marginBottom: "15px" 
+            }}>
+              <h3 style={{ 
+                margin: 0, 
+                fontSize: "18px", 
+                fontWeight: "600", 
+                color: "#1a1060" 
+              }}>
+                Editar cursos asignados
+              </h3>
+              <button
+                onClick={handleCancelEditCourses}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#666",
+                  display: "flex",
+                  padding: "5px"
+                }}
+              >
+                <XIcon size={20} />
+              </button>
+            </div>
+
+            <p style={{ 
+              fontSize: "14px", 
+              color: "#666", 
+              marginBottom: "15px" 
+            }}>
+              CURP: <strong style={{ fontFamily: "monospace" }}>{editingCurpId}</strong>
+            </p>
+
+            <div style={{ marginBottom: "20px" }}>
+              <p style={{ 
+                fontSize: "14px", 
+                color: "#666", 
+                marginBottom: "10px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
+              }}>
+                <BookIcon size={16} color="#666" />
+                Selecciona los cursos disponibles para este usuario:
+              </p>
+
+              <div style={{ 
+                border: "1px solid #ddd", 
+                borderRadius: "8px",
+                maxHeight: "200px",
+                overflowY: "auto"
+              }}>
+                {availableCourses.map(course => (
+                  <div
+                    key={course.id}
+                    onClick={() => handleEditCourseSelect(course.id)}
+                    style={{
+                      padding: "10px 12px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: "1px solid #f5f5f5",
+                      backgroundColor: editingCourses.includes(course.id) ? "rgba(26, 16, 96, 0.05)" : "white"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(26, 16, 96, 0.05)"}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = editingCourses.includes(course.id) ? "rgba(26, 16, 96, 0.05)" : "white"}
+                  >
+                    <span style={{ fontSize: "14px" }}>{course.name}</span>
+                    {editingCourses.includes(course.id) && (
+                      <CheckIcon size={16} color="#1a1060" />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Mostrar cursos seleccionados como chips/tags */}
+              {editingCourses.length > 0 && (
+                <div style={{ 
+                  display: "flex", 
+                  flexWrap: "wrap", 
+                  gap: "8px",
+                  marginTop: "15px" 
+                }}>
+                  {editingCourses.map(courseId => {
+                    const course = availableCourses.find(c => c.id === courseId);
+                    return (
+                      <div 
+                        key={courseId}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          backgroundColor: "rgba(26, 16, 96, 0.1)",
+                          color: "#1a1060",
+                          padding: "4px 10px",
+                          borderRadius: "16px",
+                          fontSize: "12px",
+                          fontWeight: "500"
+                        }}
+                      >
+                        <span>{course?.name}</span>
+                        <button
+                          type="button" 
+                          onClick={() => handleEditCourseSelect(courseId)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: "0",
+                            display: "flex",
+                            alignItems: "center",
+                            color: "#1a1060"
+                          }}
+                        >
+                          <svg 
+                            width="14" 
+                            height="14" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div style={{ 
+              display: "flex", 
+              justifyContent: "flex-end", 
+              gap: "10px",
+              marginTop: "20px" 
+            }}>
+              <button
+                onClick={handleCancelEditCourses}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "white",
+                  color: "#666",
+                  border: "1px solid #ddd",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                  cursor: "pointer"
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSaveEditCourses}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#1a1060",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}
+              >
+                <CheckIcon size={16} />
+                Guardar cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
