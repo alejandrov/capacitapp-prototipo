@@ -162,34 +162,8 @@ const SolicitudDetalle = () => {
           <div className="solicitud-metadata">
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <p className="solicitud-id">Folio #{solicitud.id}</p>
-              <div 
-                style={{ 
-                  display: 'inline-flex', 
-                  alignItems: 'center', 
-                  marginLeft: '20px',
-                  fontSize: '14px',
-                  color: '#666'
-                }}
-              >
-                <span style={{ marginRight: '8px' }}>Oportunidad:</span>
-                <span
-                  style={{
-                    display: 'inline-flex',
-                    width: '24px',
-                    height: '24px',
-                    borderRadius: '50%',
-                    backgroundColor: solicitud.oportunidad > 2 ? '#f2f2f2' : '#1a1060',
-                    color: solicitud.oportunidad > 2 ? '#666' : 'white',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    fontSize: '12px',
-                    fontWeight: '500'
-                  }}
-                >
-                  {solicitud.oportunidad}
-                </span>
-              </div>
+              <p className="solicitud-id">&nbsp;&nbsp;&nbsp;&nbsp;Oportunidad #{solicitud.oportunidad}</p>
+            
             </div>
             <p className="solicitud-fecha">{solicitud.curso.fecha}</p>
           </div>
