@@ -1,7 +1,8 @@
 import React from 'react';
 import { 
   Home as HomeIcon, 
-  MessageCircle as MessageCircleIcon 
+  MessageCircle as MessageCircleIcon,
+  ClipboardList as ClipboardListIcon
 } from 'lucide-react';
 
 const BottomNavigation = ({ activeTab, onTabChange }) => {
@@ -33,6 +34,20 @@ const BottomNavigation = ({ activeTab, onTabChange }) => {
       >
         <HomeIcon size={24} />
         <span style={{ fontSize: '12px', marginTop: '5px' }}>Inicio</span>
+      </button>
+      <button 
+        onClick={() => onTabChange('courses')}
+        style={{ 
+          background: 'none', 
+          border: 'none', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center',
+          color: activeTab === 'courses' ? '#1a1060' : '#666' 
+        }}
+      >
+        <ClipboardListIcon size={24} />
+        <span style={{ fontSize: '12px', marginTop: '5px' }}>Mis Cursos</span>
       </button>
       <button 
         onClick={() => onTabChange('messages')}

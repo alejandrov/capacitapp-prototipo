@@ -53,6 +53,8 @@ const EmpleadoDashboard = () => {
     setActiveTab(tab);
     if (tab === "messages") {
       navigate("/dashboard/empleado/messages");
+    } else if (tab === "courses") {
+      navigate("/dashboard/empleado/courses");
     }
   };
 

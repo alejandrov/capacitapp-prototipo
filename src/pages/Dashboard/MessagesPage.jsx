@@ -43,6 +43,10 @@ const MessagesPage = () => {
     setActiveTab(tab);
     if (tab === 'home') {
       navigate('/dashboard/empleado');
+    } else if (tab === 'messages') {
+      navigate('/dashboard/empleado/messages');
+    } else if (tab === 'courses') {
+      navigate('/dashboard/empleado/courses');
     }
   };
 

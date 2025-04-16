@@ -9,6 +9,7 @@ import Button from "../../components/common/Button";
 import PageHeaderMain from "../../components/common/PageHeaderMain";
 import useAuth from "../../hooks/useAuth";
 import "./SafetyCourse.css";
+import BottomNavigation from "../../pages/Dashboard/BottomNavigation";
 
 const SafetyCourse = () => {
   const navigate = useNavigate();
@@ -123,6 +124,8 @@ const SafetyCourse = () => {
       navigate("/dashboard/empleado");
     } else if (tab === "messages") {
       navigate("/dashboard/empleado/messages");
+    } else if (tab === "courses") {
+      navigate("/dashboard/empleado/courses");
     }
   };
 
@@ -275,44 +278,7 @@ const SafetyCourse = () => {
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          padding: "10px",
-          backgroundColor: "white",
-          borderTop: "1px solid #ddd",
-        }}
-      >
-        <button
-          onClick={() => handleTabChange("home")}
-          style={{
-            background: "none",
-            border: "none",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            color: activeTab === "home" ? "#1a1060" : "#666",
-          }}
-        >
-          <HomeIcon size={24} />
-          <span style={{ fontSize: "12px", marginTop: "5px" }}>Inicio</span>
-        </button>
-        <button
-          onClick={() => handleTabChange("messages")}
-          style={{
-            background: "none",
-            border: "none",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            color: activeTab === "messages" ? "#1a1060" : "#666",
-          }}
-        >
-          <MessageCircleIcon size={24} />
-          <span style={{ fontSize: "12px", marginTop: "5px" }}>Mensajes</span>
-        </button>
-      </div>
+      <BottomNavigation activeTab={activeTab} onTabChange={handleTabChange} />
     </div>
   );
 };

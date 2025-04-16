@@ -1,0 +1,169 @@
+.curso-detalle-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.curso-detalle-content {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.curso-info-section,
+.curso-descripcion-section,
+.curso-progreso-section,
+.curso-modulos-section {
+  margin-bottom: 32px;
+}
+
+.curso-info-section h3,
+.curso-descripcion-section h3,
+.curso-progreso-section h3,
+.curso-modulos-section h3 {
+  color: #333;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.info-value {
+  color: #333;
+  font-weight: 500;
+}
+
+.curso-descripcion-section p {
+  color: #666;
+  line-height: 1.6;
+}
+
+.progreso-bar {
+  height: 8px;
+  background-color: #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progreso-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.progreso-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.estatus-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.modulos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modulo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #F5F5F5;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.modulo-item:hover {
+  background-color: #EEEEEE;
+}
+
+.modulo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modulo-info h4 {
+  color: #333;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.modulo-duracion {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.modulo-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-completado {
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+.btn-iniciar {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-iniciar:hover {
+  background-color: #1976D2;
+}
+
+@media (max-width: 768px) {
+  .curso-detalle-container {
+    padding: 16px;
+  }
+
+  .curso-detalle-content {
+    padding: 16px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modulo-item {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .modulo-status {
+    width: 100%;
+    justify-content: flex-end;
+  }
+} 

@@ -18,6 +18,8 @@ import ComplementaryTestModule from './pages/Courses/ComplementaryTestModule';
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
+import MisCursosPage from './pages/Dashboard/MisCursosPage';
+import CursoDetalle from './pages/Dashboard/CursoDetalle';
 
 // Componente wrapper para rutas protegidas
 const ProtectedRoute = () => {
@@ -71,6 +73,8 @@ function App() {
           <Route path="/dashboard" element={<DashboardRedirect />} />
           <Route path="/dashboard/empleado" element={<EmpleadoDashboard />} />
           <Route path="/dashboard/empleado/messages" element={<MessagesPage />} />
+          <Route path="/dashboard/empleado/courses" element={<MisCursosPage />} />
+          <Route path="/dashboard/empleado/courses/:id" element={<CursoDetalle />} />
           
           {/* Rutas para el dashboard del ejecutivo con subrutas */}
           <Route path="/dashboard/ejecutivo/*" element={<EjecutivoDashboard />} />
